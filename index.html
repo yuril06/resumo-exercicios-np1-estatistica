@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo NP1 — Estatística</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0e1118;--bg3:#161b27;--border:#1e2535;
+  --a:#f5c842;--a2:#3ecfff;--a3:#ff5f7e;--a4:#4fffb0;
+  --text:#e8eaf0;--muted:#6b7492;
+  --syne:'Syne',sans-serif;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;min-height:100vh}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* LOGIN */
+#s-login{align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden}
+#s-login::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(245,200,66,0.06),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(62,207,255,0.05),transparent 60%)}
+.login-box{max-width:440px;width:100%;text-align:center;position:relative;z-index:1}
+.login-logo{font-family:var(--syne);font-size:42px;font-weight:800;color:var(--a);letter-spacing:-1px;margin-bottom:4px}
+.login-logo span{color:var(--a2)}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:40px;letter-spacing:1px;text-transform:uppercase}
+.login-label{font-size:12px;color:var(--muted);text-align:left;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono)}
+.login-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--syne);font-size:20px;padding:14px 18px;outline:none;transition:border-color .2s;margin-bottom:20px}
+.login-input:focus{border-color:var(--a)}
+.login-btn{width:100%;background:var(--a);color:#000;border:none;border-radius:10px;font-family:var(--syne);font-size:16px;font-weight:700;padding:15px;cursor:pointer;transition:all .2s}
+.login-btn:hover{background:#e6b800;transform:translateY(-1px)}
+.login-tip{font-size:12px;color:var(--muted);margin-top:14px}
+
+/* HEADER */
+#s-main{flex-direction:column}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.hd-left{display:flex;align-items:center;gap:12px}
+.hd-logo{font-family:var(--syne);font-size:18px;font-weight:800;color:var(--a)}
+.hd-logo span{color:var(--a2)}
+.hd-user{font-size:13px;color:var(--muted)}
+.hd-user strong{color:var(--text)}
+.hd-right{display:flex;align-items:center;gap:12px}
+.xp-badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-family:var(--mono);font-size:12px;color:var(--a)}
+.logout-btn{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;padding:5px 12px;cursor:pointer}
+.logout-btn:hover{color:var(--text)}
+
+/* NAV */
+.nav-tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 12px}
+.ntab{padding:13px 16px;border:none;background:transparent;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--sans);font-size:13px;cursor:pointer;white-space:nowrap;transition:all .2s}
+.ntab:hover{color:var(--text)}
+.ntab.active{color:var(--a);border-bottom-color:var(--a)}
+
+.content{max-width:900px;margin:0 auto;padding:2rem 1.5rem;width:100%}
+.panel{display:none}
+.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:14px}
+.card-title{font-family:var(--syne);font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px}
+.stag{font-family:var(--mono);font-size:11px;color:var(--a);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.sh{font-family:var(--syne);font-size:24px;font-weight:800;margin-bottom:1.5rem;color:var(--text)}
+.csub{font-size:13px;color:#c0c4d6;line-height:1.8}
+.csub li{margin-left:1.3rem;margin-bottom:3px}
+.sep{height:1px;background:var(--border);margin:2rem 0}
+
+/* FORMULA */
+.fbox{background:var(--bg3);border:1px solid var(--a);border-radius:10px;padding:1.1rem 1.4rem;margin:12px 0}
+.fbox .ftitle{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:var(--mono)}
+.fbox .fmain{font-family:var(--mono);font-size:15px;color:var(--a);text-align:center;margin-bottom:12px}
+.fbox table{width:100%;border-collapse:collapse;font-size:13px}
+.fbox table td{padding:5px 8px;border-bottom:1px solid var(--border);color:#c0c4d6}
+.fbox table td:first-child{color:var(--a2);font-family:var(--mono);font-weight:500;width:70px}
+.fbox table tr:last-child td{border-bottom:none}
+
+/* HINT */
+.hint{background:rgba(245,200,66,0.06);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:13px;color:#c0c4d6}
+.hint strong{color:var(--a)}
+.hint2{background:rgba(62,207,255,0.06);border-left:3px solid var(--a2);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:13px;color:#c0c4d6}
+.hint2 strong{color:var(--a2)}
+.hint3{background:rgba(79,255,176,0.06);border-left:3px solid var(--a4);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:13px;color:#c0c4d6}
+.hint3 strong{color:var(--a4)}
+
+/* YOUTUBE TIP */
+.yt-tip{background:rgba(255,95,126,0.05);border:1px solid rgba(255,95,126,0.2);border-radius:10px;padding:10px 16px;margin:14px 0;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.yt-tip strong{color:#ff5f7e;font-family:var(--mono)}
+
+/* PAPEL TIP */
+.papel-tip{background:rgba(245,200,66,0.07);border:1px dashed rgba(245,200,66,0.3);border-radius:10px;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
+.papel-tip strong{color:var(--a)}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:10px 0}
+table.std{border-collapse:collapse;width:100%;font-size:13px}
+table.std th{background:var(--bg3);color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+table.std td{padding:8px 12px;border-bottom:1px solid var(--border);color:#c0c4d6}
+table.std tr:last-child td{border-bottom:none}
+table.std tr:hover td{background:rgba(255,255,255,0.02)}
+.hi{color:var(--a);font-weight:500}
+.hi2{color:var(--a2)}
+.hi3{color:var(--a4)}
+
+/* STEPS */
+.step{display:flex;gap:12px;margin-bottom:10px}
+.snum{width:26px;height:26px;border-radius:50%;background:var(--a);color:#000;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;font-family:var(--mono);margin-top:3px}
+.stext{font-size:13px;color:#c0c4d6;line-height:1.7}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:12px;margin-bottom:12px}
+
+/* SCORE */
+.score-panel{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.score-big{font-family:var(--syne);font-size:34px;font-weight:800;color:var(--a)}
+.score-info{flex:1}
+.score-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase}
+.xp-bar-wrap{background:var(--border);border-radius:4px;height:5px;overflow:hidden;margin-top:6px}
+.xp-bar{height:100%;background:var(--a);border-radius:4px;transition:width .5s ease}
+.prog-text{font-size:12px;color:var(--muted);margin-top:4px;font-family:var(--mono)}
+
+/* LEVEL HEADER */
+.level-header{display:flex;align-items:center;gap:12px;margin-bottom:1.2rem;margin-top:2rem;flex-wrap:wrap}
+.level-badge{background:var(--a);color:#000;font-family:var(--syne);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:1px}
+.level-badge.l2{background:var(--a2)}
+.level-badge.l3{background:var(--a3);color:#fff}
+.level-badge.l4{background:var(--a4)}
+.level-title{font-family:var(--syne);font-size:18px;font-weight:700}
+.level-xp{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto}
+
+/* EX CARDS */
+.ex-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:16px;transition:border-color .3s}
+.ex-num{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:8px}
+.ex-q{font-family:var(--syne);font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.5}
+.ex-hint-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-family:var(--mono);font-size:12px;color:var(--a2);margin-bottom:12px}
+
+/* MC */
+.mc-opts{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.mc-opt{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:11px 14px;cursor:pointer;font-size:13px;color:#c0c4d6;transition:all .2s;text-align:left;width:100%;font-family:var(--sans)}
+.mc-opt:hover{border-color:var(--a2);color:var(--text)}
+.mc-opt.correct{border-color:var(--a4)!important;background:rgba(79,255,176,0.08);color:var(--a4)!important}
+.mc-opt.wrong{border-color:var(--a3)!important;background:rgba(255,95,126,0.08);color:var(--a3)!important}
+
+/* TYPED */
+.ans-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.ans-label{font-size:13px;color:#c0c4d6;flex:1;min-width:200px}
+.ans-inp{background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--mono);font-size:13px;padding:7px 12px;width:110px;text-align:center;outline:none;transition:border-color .2s}
+.ans-inp:focus{border-color:var(--a2)}
+.ans-inp.correct{border-color:var(--a4)!important;background:rgba(79,255,176,0.07);color:var(--a4)}
+.ans-inp.wrong{border-color:var(--a3)!important;background:rgba(255,95,126,0.07);color:var(--a3)}
+
+/* BUTTONS */
+.tbl-inp{background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:12px;padding:5px 6px;width:72px;text-align:center;outline:none;transition:border-color .2s}
+.tbl-inp:focus{border-color:var(--a2)}
+.tbl-inp.correct{border-color:var(--a4)!important;background:rgba(79,255,176,0.07);color:var(--a4)}
+.tbl-inp.wrong{border-color:var(--a3)!important;background:rgba(255,95,126,0.07);color:var(--a3)}
+table.ex-tbl{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+table.ex-tbl th{background:var(--bg3);color:var(--a);font-family:var(--mono);font-size:11px;padding:8px 10px;text-align:center;border-bottom:1px solid var(--border)}
+table.ex-tbl td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:center;color:#c0c4d6;vertical-align:middle}
+table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
+.btn{padding:9px 20px;border-radius:8px;border:none;cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;transition:all .2s;margin-right:6px;margin-top:4px}
+.btn-primary{background:var(--a);color:#000}
+.btn-primary:hover{background:#e6b800}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text)}
+.btn-blue{background:transparent;color:var(--a2);border:1px solid rgba(62,207,255,0.3)}
+.btn-blue:hover{background:rgba(62,207,255,0.08)}
+
+/* FEEDBACK */
+.fb-msg{font-size:12px;padding:9px 14px;border-radius:7px;margin-top:8px;font-family:var(--mono);display:none}
+.fb-msg.ok{background:rgba(79,255,176,0.07);color:var(--a4);border:1px solid rgba(79,255,176,0.2);display:block}
+.fb-msg.err{background:rgba(255,95,126,0.07);color:var(--a3);border:1px solid rgba(255,95,126,0.2);display:block}
+.gabarito{display:none;background:var(--bg3);border:1px solid rgba(79,255,176,0.15);border-radius:8px;padding:11px 14px;margin-top:10px;font-size:13px;color:var(--a4);line-height:1.8}
+.gabarito.show{display:block}
+
+/* XP POP */
+.xp-pop{position:fixed;top:70px;right:20px;background:var(--bg2);border:1px solid var(--a4);border-radius:10px;padding:9px 18px;font-family:var(--syne);font-size:14px;font-weight:700;color:var(--a4);z-index:999;animation:popIn .3s ease,popOut .3s ease 1.7s forwards;pointer-events:none}
+@keyframes popIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popOut{to{opacity:0;transform:translateY(-8px)}}
+
+/* INSTAGRAM */
+.insta-bar{text-align:center;padding:14px;border-top:1px solid var(--border);background:var(--bg2);margin-top:auto}
+.insta-bar a{color:var(--muted);font-size:12px;font-family:var(--mono);text-decoration:none;transition:color .2s;letter-spacing:.5px}
+.insta-bar a:hover{color:var(--a)}
+
+.gpt-btn{position:fixed;bottom:24px;right:24px;background:#10a37f;color:#fff;border:none;border-radius:50px;padding:12px 20px;font-family:var(--syne);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(16,163,127,0.4);transition:all .2s;z-index:200;text-decoration:none;white-space:nowrap}
+.gpt-btn:hover{background:#0d8f6f;transform:translateY(-2px)}
+@media(max-width:600px){.content{padding:1.2rem 1rem}.grid2{grid-template-columns:1fr}.level-xp{margin-left:0}.gpt-btn{bottom:16px;right:16px;padding:10px 14px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="s-login" class="screen active">
+  <div class="login-box">
+    <div class="login-logo">Resumo <span>NP1</span></div>
+    <div class="login-sub">Estatística · UNIP ADS · Prof. Yanick</div>
+    <div class="login-label">Seu nome</div>
+    <input id="login-name" class="login-input" placeholder="Ex: João Silva" maxlength="40">
+    <button class="login-btn" onclick="startApp()">ENTRAR E ESTUDAR →</button>
+    <p class="login-tip">Seu progresso fica salvo neste navegador automaticamente.</p>
+    <a href="https://instagram.com/yuril06" target="_blank" style="display:inline-block;margin-top:20px;color:var(--muted);font-family:var(--mono);font-size:12px;text-decoration:none;letter-spacing:.5px;transition:color .2s" onmouseover="this.style.color='#f5c842'" onmouseout="this.style.color='var(--muted)'">feito por @yuril06 · segue lá 🤙</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="s-main" class="screen">
+  <header>
+    <div class="hd-left">
+      <div class="hd-logo">Resumo <span>NP1</span></div>
+      <div class="hd-user">Olá, <strong id="hd-name">—</strong></div>
+    </div>
+    <div class="hd-right">
+      <div class="xp-badge">XP <span id="hd-xp">0</span></div>
+      <button class="logout-btn" onclick="logout()">Trocar nome</button>
+    </div>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="ntab active" onclick="showTab('conceitos',this)">Conceitos</button>
+    <button class="ntab" onclick="showTab('frequencia',this)">Frequências</button>
+    <button class="ntab" onclick="showTab('tendencia',this)">Tendência Central</button>
+    <button class="ntab" onclick="showTab('dispersao',this)">Dispersão</button>
+    <button class="ntab" onclick="showTab('graficos',this)">Gráficos</button>
+    <button class="ntab" onclick="showTab('revisao',this)">Revisão Completa</button>
+    <button class="ntab" onclick="showTab('exercicios',this)">Exercícios</button>
+  </div>
+
+  <!-- CONCEITOS -->
+  <div id="conceitos" class="panel active">
+  <div class="content">
+    <div class="stag">Nível 1</div>
+    <div class="sh">Conceitos Fundamentais</div>
+
+    <div class="yt-tip">▶ <div>Não entendeu? Pesquise no YouTube: <strong>"estatística descritiva conceitos básicos"</strong></div></div>
+
+    <div class="card">
+      <div class="card-title">📊 O que é Estatística?</div>
+      <div class="csub">Área da matemática que <strong>coleta, organiza, analisa e interpreta dados</strong> para tirar conclusões.</div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="card" style="margin-bottom:0;border-color:rgba(245,200,66,0.25)">
+          <div class="card-title" style="font-size:13px;color:var(--a)">Descritiva</div>
+          <div class="csub" style="font-size:13px">Organiza e descreve os dados. Usa tabelas, gráficos e medidas. Não vai além do que foi coletado.</div>
+        </div>
+        <div class="card" style="margin-bottom:0;border-color:rgba(62,207,255,0.25)">
+          <div class="card-title" style="font-size:13px;color:var(--a2)">Inferencial</div>
+          <div class="csub" style="font-size:13px">Analisa uma amostra e faz generalizações sobre a população inteira.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👥 População, Amostra, Censo e Amostragem</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Conceito</th><th>O que é</th><th>Exemplo</th></tr>
+          <tr><td class="hi">População</td><td>Conjunto <strong>total</strong> de elementos estudados</td><td>Todos os 300 alunos de ADS</td></tr>
+          <tr><td class="hi">Amostra</td><td>Parte selecionada para representar o todo</td><td>60 alunos sorteados</td></tr>
+          <tr><td class="hi">Censo</td><td>Estudo de <strong>TODOS</strong> os elementos</td><td>Coletar nota de todos os 300</td></tr>
+          <tr><td class="hi">Amostragem</td><td>O <strong>método</strong> usado para selecionar a amostra</td><td>O sorteio dos 60 alunos</td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Dica:</strong> Censo = todos. Amostragem = o método. Amostra = a parte que foi escolhida.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Tipos de Amostragem</div>
+      <div class="step"><div class="snum">1</div><div class="stext"><strong style="color:var(--a)">Aleatória Simples</strong> — todos têm a mesma chance. Feita por sorteio.<br>Ex: turma de 100 alunos → numera de 1 a 100 → sorteia 20.</div></div>
+      <div class="step"><div class="snum">2</div><div class="stext"><strong style="color:var(--a)">Proporcional Estratificada</strong> — divide em grupos e retira amostras proporcionais.<br>
+        200 alunos (100 no 1º sem, 60 no 2º, 40 no 3º). Amostra de 50:<br>
+        1º sem → (100÷200)×50 = <strong style="color:var(--a)">25</strong> | 2º sem → <strong style="color:var(--a)">15</strong> | 3º sem → <strong style="color:var(--a)">10</strong>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Dados Brutos e Rol</div>
+      <div class="csub"><strong style="color:var(--a)">Dados brutos</strong> — coletados sem organização. Difíceis de analisar.<br><br><strong style="color:var(--a2)">Rol</strong> — dados em ordem crescente ou decrescente. Sempre o primeiro passo.</div>
+      <div class="hint2" style="margin-top:10px">Brutos: 1,70 / 1,60 / 1,65 / 1,78 / 1,71<br>Rol: <strong>1,60 / 1,65 / 1,70 / 1,71 / 1,78</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔢 Variável Discreta vs Contínua</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Característica</th><th>Discreta</th><th>Contínua</th></tr>
+          <tr><td>Valores</td><td class="hi">Inteiros (1, 2, 3...)</td><td class="hi2">Qualquer valor (1,70 / 1,725...)</td></tr>
+          <tr><td>Origem</td><td>Contagem</td><td>Medição</td></tr>
+          <tr><td>Tabela</td><td>Sem classes</td><td>Com classes</td></tr>
+          <tr><td>Gráfico</td><td>Barras</td><td>Histograma</td></tr>
+          <tr><td>Exemplos</td><td>Faltas, filhos, gols</td><td>Altura, peso, tempo</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📅 Séries Estatísticas</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Tipo</th><th>O que varia</th><th>O que é fixo</th><th>Exemplo</th></tr>
+          <tr><td class="hi">Temporal</td><td>Tempo (ano, mês)</td><td>Fato e local</td><td>Formados na UNIP por ano</td></tr>
+          <tr><td class="hi">Geográfica</td><td>Local (cidade)</td><td>Fato e época</td><td>Formados por cidade em 2025</td></tr>
+          <tr><td class="hi">Específica</td><td>Categoria</td><td>Local e época</td><td>Alunos por curso na UNIP</td></tr>
+          <tr><td class="hi">Mista</td><td>Duas ou mais</td><td>Local</td><td>Alunos por curso e por ano</td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Dica:</strong> O que está mudando? Ano = temporal. Cidade = geográfica. Curso = específica. Mais de um = mista.</div>
+    </div>
+  </div>
+  </div>
+
+  <!-- FREQUÊNCIA -->
+  <div id="frequencia" class="panel">
+  <div class="content">
+    <div class="stag">Nível 2</div>
+    <div class="sh">Distribuição de Frequências</div>
+
+    <div class="yt-tip">▶ <div>Não entendeu a tabela? Pesquise no YouTube: <strong>"distribuição de frequência estatística passo a passo"</strong></div></div>
+    <div class="papel-tip">✏️ <div><strong>Recomendação:</strong> Monte essa tabela no papel antes de responder os exercícios. Na prova é exatamente isso que o professor vai pedir — praticar no papel fixa muito mais.</div></div>
+
+    <div class="card">
+      <div class="card-title">📊 O que significa cada símbolo?</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Símbolo</th><th>Nome</th><th>Como calcular</th><th>O que representa</th></tr>
+          <tr><td class="hi" style="font-family:var(--mono)">n</td><td>Total de dados</td><td>Conte todos</td><td>Quantos dados existem no total</td></tr>
+          <tr><td class="hi" style="font-family:var(--mono)">fi</td><td>Freq. absoluta</td><td>Contagem direta</td><td>Quantas vezes aquele valor aparece</td></tr>
+          <tr><td class="hi" style="font-family:var(--mono)">Fi</td><td>Freq. acumulada</td><td>fi atual + Fi anterior</td><td>Total de dados até aqui (acumulado)</td></tr>
+          <tr><td class="hi" style="font-family:var(--mono)">fri</td><td>Freq. relativa</td><td>fi ÷ n</td><td>Proporção — vai de 0 a 1 (soma = 1,00)</td></tr>
+          <tr><td class="hi" style="font-family:var(--mono)">%</td><td>Percentual</td><td>(fi ÷ n) × 100</td><td>A mesma proporção em porcentagem</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Passo a passo — Variável Discreta</div>
+      <div class="csub" style="margin-bottom:10px">Faltas de 12 alunos: 0, 1, 2, 0, 3, 1, 2, 1, 0, 2, 1, 0</div>
+      <div class="step"><div class="snum">1</div><div class="stext">Monte o rol: <strong style="color:var(--a);font-family:var(--mono)">0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3</strong></div></div>
+      <div class="step"><div class="snum">2</div><div class="stext">Conte cada valor → 0:4×, 1:4×, 2:3×, 3:1× | n = 12</div></div>
+      <div class="step"><div class="snum">3</div><div class="stext">Preencha coluna por coluna:</div></div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Faltas</th><th>fi</th><th>Fi (acumulada)</th><th>fri</th><th>%</th></tr>
+          <tr><td>0</td><td class="hi">4</td><td>4</td><td>4÷12 = 0,33</td><td>33,3%</td></tr>
+          <tr><td>1</td><td class="hi">4</td><td>4+4 = 8</td><td>4÷12 = 0,33</td><td>33,3%</td></tr>
+          <tr><td>2</td><td class="hi">3</td><td>8+3 = 11</td><td>3÷12 = 0,25</td><td>25,0%</td></tr>
+          <tr><td>3</td><td class="hi">1</td><td>11+1 = 12</td><td>1÷12 = 0,08</td><td>8,3%</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>12</strong></td><td>—</td><td><strong>1,00</strong></td><td><strong>100%</strong></td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Fi:</strong> some fi atual com Fi da linha anterior. Na última linha Fi = n.<br><strong>fri:</strong> a soma de todos deve dar 1,00.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Passo a passo — Variável Contínua (com classes)</div>
+      <div class="step"><div class="snum">1</div><div class="stext"><strong style="color:var(--a)">AT</strong> (Amplitude Total) = maior − menor<br><span style="color:var(--muted);font-size:12px">Representa o "tamanho" do conjunto</span></div></div>
+      <div class="step"><div class="snum">2</div><div class="stext"><strong style="color:var(--a)">k</strong> (nº de classes) = √n → arredonde para cima<br><span style="color:var(--muted);font-size:12px">√n = raiz quadrada do total de dados</span></div></div>
+      <div class="step"><div class="snum">3</div><div class="stext"><strong style="color:var(--a)">h</strong> (amplitude da classe) = AT ÷ k → arredonde<br><span style="color:var(--muted);font-size:12px">h é o "tamanho" de cada intervalo</span></div></div>
+      <div class="step"><div class="snum">4</div><div class="stext">Monte as classes e conte os valores em cada uma</div></div>
+      <div class="hint2">Exemplo: 20 alunos, menor=1,60, maior=1,82<br>AT = 0,22 | k = √20 ≈ 5 | h = 0,22÷5 = 0,044</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Classe (m)</th><th>fi</th><th>Fi</th><th>fri (%)</th></tr>
+          <tr><td>1,600 – 1,644</td><td class="hi">5</td><td>5</td><td>25%</td></tr>
+          <tr><td>1,644 – 1,688</td><td class="hi">4</td><td>9</td><td>20%</td></tr>
+          <tr><td>1,688 – 1,732</td><td class="hi">4</td><td>13</td><td>20%</td></tr>
+          <tr><td>1,732 – 1,776</td><td class="hi">4</td><td>17</td><td>20%</td></tr>
+          <tr><td>1,776 – 1,820</td><td class="hi">3</td><td>20</td><td>15%</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>20</strong></td><td>—</td><td><strong>100%</strong></td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Dica:</strong> valor ≥ limite inferior e &lt; limite superior pertence à classe. O valor 1,644 entra na 2ª classe.</div>
+    </div>
+  </div>
+  </div>
+
+  <!-- TENDÊNCIA CENTRAL -->
+  <div id="tendencia" class="panel">
+  <div class="content">
+    <div class="stag">Nível 3</div>
+    <div class="sh">Medidas de Tendência Central</div>
+
+    <div class="yt-tip">▶ <div>Não entendeu? Pesquise no YouTube: <strong>"média mediana moda estatística exercícios resolvidos"</strong></div></div>
+    <div class="papel-tip">✏️ <div><strong>Recomendação:</strong> Pegue papel e resolva os exemplos desta página antes de ir pros exercícios. Calcular na mão é o que vai fazer fixar.</div></div>
+
+    <div class="card">
+      <div class="card-title">➕ Média Aritmética Simples</div>
+      <div class="fbox">
+        <div class="ftitle">Fórmula</div>
+        <div class="fmain">x̄ = Σxi ÷ n</div>
+        <table>
+          <tr><td>x̄</td><td>"x barra" — é a média, o resultado final</td></tr>
+          <tr><td>Σ</td><td>"Sigma" — significa "some tudo". Símbolo de somatório</td></tr>
+          <tr><td>xi</td><td>Cada valor individual (x1, x2, x3...)</td></tr>
+          <tr><td>n</td><td>Total de dados — quantos valores existem</td></tr>
+        </table>
+      </div>
+      <div class="step"><div class="snum">1</div><div class="stext">Some todos os valores</div></div>
+      <div class="step"><div class="snum">2</div><div class="stext">Divida pelo total de dados (n)</div></div>
+      <div class="hint2">Exemplo: 120, 135, 150, 110, 200, 125<br>Soma = 840 | n = 6 | x̄ = 840÷6 = <strong>140</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Média de Dados Agrupados em Classes</div>
+      <div class="fbox">
+        <div class="ftitle">Fórmula</div>
+        <div class="fmain">x̄ = Σ(xi × fi) ÷ n</div>
+        <table>
+          <tr><td>xi</td><td>Ponto médio da classe = (limite inf. + limite sup.) ÷ 2</td></tr>
+          <tr><td>fi</td><td>Frequência da classe — quantos valores caem nela</td></tr>
+          <tr><td>xi×fi</td><td>Ponto médio × frequência — coluna extra na tabela</td></tr>
+          <tr><td>n</td><td>Total de dados</td></tr>
+        </table>
+      </div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Classe (ms)</th><th>fi</th><th>xi</th><th>xi × fi</th></tr>
+          <tr><td>100–120</td><td>4</td><td>110</td><td class="hi">440</td></tr>
+          <tr><td>120–140</td><td>4</td><td>130</td><td class="hi">520</td></tr>
+          <tr><td>140–160</td><td>4</td><td>150</td><td class="hi">600</td></tr>
+          <tr><td>160–180</td><td>4</td><td>170</td><td class="hi">680</td></tr>
+          <tr><td>180–200</td><td>4</td><td>190</td><td class="hi">760</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>20</strong></td><td>—</td><td><strong>3000</strong></td></tr>
+        </table>
+      </div>
+      <div class="hint">x̄ = 3000÷20 = <strong>150</strong> | Some a coluna xi×fi e divida por n.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Mediana</div>
+      <div class="csub" style="margin-bottom:10px">Valor do meio quando os dados estão em ordem. Divide em <strong>50% abaixo e 50% acima</strong>.</div>
+      <div class="grid2">
+        <div class="card" style="margin-bottom:0;border-color:rgba(245,200,66,0.25)">
+          <div class="card-title" style="font-size:13px;color:var(--a)">n ímpar</div>
+          <div class="csub" style="font-size:13px">Posição = (n+1)÷2<br>Ex: n=9 → posição 5ª → Md = 5º valor do rol</div>
+        </div>
+        <div class="card" style="margin-bottom:0;border-color:rgba(62,207,255,0.25)">
+          <div class="card-title" style="font-size:13px;color:var(--a2)">n par</div>
+          <div class="csub" style="font-size:13px">Média dos dois do meio (posições n/2 e n/2+1)<br>Ex: n=8 → posições 4ª e 5ª → Md = (val4+val5)÷2</div>
+        </div>
+      </div>
+      <div class="fbox" style="margin-top:12px">
+        <div class="ftitle">Mediana para dados agrupados</div>
+        <div class="fmain">Md = L + [(n/2 − Fi₋₁) ÷ fi] × h</div>
+        <table>
+          <tr><td>L</td><td>Limite inferior da classe mediana (onde a classe começa)</td></tr>
+          <tr><td>n/2</td><td>Metade do total — aqui está a mediana</td></tr>
+          <tr><td>Fi₋₁</td><td>Frequência acumulada da classe ANTERIOR</td></tr>
+          <tr><td>fi</td><td>Frequência da classe mediana</td></tr>
+          <tr><td>h</td><td>Amplitude da classe (tamanho do intervalo)</td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Classe mediana:</strong> primeira onde Fi ≥ n/2.<br><strong>Nunca esqueça:</strong> sempre organize o rol antes de calcular a mediana.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔁 Moda</div>
+      <div class="csub" style="margin-bottom:10px">O valor que <strong>mais se repete</strong>. Sem cálculo — só conta repetições.</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Tipo</th><th>O que significa</th><th>Exemplo</th></tr>
+          <tr><td class="hi">Amodal</td><td>Nenhum valor se repete</td><td>{3,5,8,11} → sem moda</td></tr>
+          <tr><td class="hi">Unimodal</td><td>Um valor se repete mais</td><td>{1,1,3,7,7,7} → Mo=7</td></tr>
+          <tr><td class="hi">Bimodal</td><td>Dois valores empatam</td><td>{5,5,5,7,7,7} → Mo=5 e 7</td></tr>
+          <tr><td class="hi">Multimodal</td><td>Mais de dois empatam</td><td>Três ou mais empatam</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- DISPERSÃO -->
+  <div id="dispersao" class="panel">
+  <div class="content">
+    <div class="stag">Nível 4</div>
+    <div class="sh">Medidas de Dispersão</div>
+
+    <div class="yt-tip">▶ <div>Não entendeu? Pesquise no YouTube: <strong>"desvio padrão variância estatística exercícios resolvidos"</strong></div></div>
+    <div class="papel-tip">✏️ <div><strong>Recomendação:</strong> Monte a tabela de desvios no papel. Calcule linha por linha. É a única forma de não errar na prova.</div></div>
+
+    <div class="card">
+      <div class="card-title">❓ Por que medir dispersão?</div>
+      <div class="grid2">
+        <div class="card" style="margin-bottom:0;border-color:rgba(79,255,176,0.2)">
+          <div class="card-title" style="font-size:13px;color:var(--a4)">Turma A — média 7</div>
+          <div class="csub" style="font-family:var(--mono);font-size:13px">6, 7, 7, 8, 7 → concentradas</div>
+        </div>
+        <div class="card" style="margin-bottom:0;border-color:rgba(255,95,126,0.2)">
+          <div class="card-title" style="font-size:13px;color:var(--a3)">Turma B — média 7</div>
+          <div class="csub" style="font-family:var(--mono);font-size:13px">4, 5, 7, 9, 10 → espalhadas</div>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:10px">Mesma média, desempenhos diferentes. As medidas de dispersão mostram esse <strong>espalhamento</strong>.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📏 Desvio Médio (DM)</div>
+      <div class="fbox">
+        <div class="ftitle">Fórmula</div>
+        <div class="fmain">DM = Σ|xi − x̄| ÷ n</div>
+        <table>
+          <tr><td>DM</td><td>Desvio Médio — o afastamento médio dos dados</td></tr>
+          <tr><td>xi</td><td>Cada valor do conjunto</td></tr>
+          <tr><td>x̄</td><td>A média — calcule primeiro</td></tr>
+          <tr><td>| |</td><td>Módulo — sempre positivo. |−5| = 5. Nunca negativo!</td></tr>
+          <tr><td>Σ</td><td>Some todos os módulos</td></tr>
+          <tr><td>n</td><td>Total de dados</td></tr>
+        </table>
+      </div>
+      <div class="csub" style="margin-bottom:10px">Dados: 2, 4, 5, 6, 8, 9, 10, 12 | x̄ = 7</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>xi</th><th>xi − x̄</th><th>|xi − x̄|</th></tr>
+          <tr><td>2</td><td>−5</td><td class="hi">5</td></tr>
+          <tr><td>4</td><td>−3</td><td class="hi">3</td></tr>
+          <tr><td>5</td><td>−2</td><td class="hi">2</td></tr>
+          <tr><td>6</td><td>−1</td><td class="hi">1</td></tr>
+          <tr><td>8</td><td>+1</td><td class="hi">1</td></tr>
+          <tr><td>9</td><td>+2</td><td class="hi">2</td></tr>
+          <tr><td>10</td><td>+3</td><td class="hi">3</td></tr>
+          <tr><td>12</td><td>+5</td><td class="hi">5</td></tr>
+          <tr><td><strong>Soma</strong></td><td>—</td><td><strong>22</strong></td></tr>
+        </table>
+      </div>
+      <div class="hint">DM = 22÷8 = <strong>2,75</strong> → valores afastados, em média, 2,75 unidades da média.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📐 Variância (σ²) e Desvio Padrão (σ)</div>
+      <div class="fbox">
+        <div class="ftitle">Variância</div>
+        <div class="fmain">σ² = Σ(xi − x̄)² ÷ n</div>
+        <table>
+          <tr><td>σ²</td><td>"Sigma quadrado" — símbolo da variância</td></tr>
+          <tr><td>(xi−x̄)²</td><td>Diferença elevada ao quadrado — penaliza desvios grandes</td></tr>
+          <tr><td>²</td><td>Ao quadrado — a unidade também fica ao quadrado</td></tr>
+        </table>
+      </div>
+      <div class="fbox" style="border-color:var(--a4)">
+        <div class="ftitle">Desvio Padrão</div>
+        <div class="fmain" style="color:var(--a4)">σ = √variância</div>
+        <table>
+          <tr><td style="color:var(--a4)">σ</td><td>"Sigma" — volta para a mesma unidade dos dados</td></tr>
+          <tr><td style="color:var(--a4)">√</td><td>Raiz quadrada da variância</td></tr>
+        </table>
+      </div>
+      <div class="csub" style="margin-bottom:10px">Usando os mesmos dados (x̄ = 7):</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>xi</th><th>xi − x̄</th><th>(xi − x̄)²</th></tr>
+          <tr><td>2</td><td>−5</td><td class="hi">25</td></tr>
+          <tr><td>4</td><td>−3</td><td class="hi">9</td></tr>
+          <tr><td>5</td><td>−2</td><td class="hi">4</td></tr>
+          <tr><td>6</td><td>−1</td><td class="hi">1</td></tr>
+          <tr><td>8</td><td>+1</td><td class="hi">1</td></tr>
+          <tr><td>9</td><td>+2</td><td class="hi">4</td></tr>
+          <tr><td>10</td><td>+3</td><td class="hi">9</td></tr>
+          <tr><td>12</td><td>+5</td><td class="hi">25</td></tr>
+          <tr><td><strong>Soma</strong></td><td>—</td><td><strong>78</strong></td></tr>
+        </table>
+      </div>
+      <div class="hint">σ² = 78÷8 = <strong>9,75</strong> | σ = √9,75 ≈ <strong>3,12</strong></div>
+      <div class="hint3" style="margin-top:8px"><strong>Ordem sempre:</strong> Média → Variância → Desvio Padrão. Um depende do outro.</div>
+      <div class="tbl-wrap" style="margin-top:12px">
+        <table class="std">
+          <tr><th>Medida</th><th>Fórmula</th><th>Unidade</th></tr>
+          <tr><td class="hi">Desvio Médio</td><td style="font-family:var(--mono)">Σ|xi−x̄| ÷ n</td><td>Mesma dos dados</td></tr>
+          <tr><td class="hi">Variância</td><td style="font-family:var(--mono)">Σ(xi−x̄)² ÷ n</td><td>Unidade²</td></tr>
+          <tr><td class="hi">Desvio Padrão</td><td style="font-family:var(--mono)">√variância</td><td>Mesma dos dados</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <!-- GRÁFICOS -->
+  <div id="graficos" class="panel">
+  <div class="content">
+    <div class="stag">Extra</div>
+    <div class="sh">Representação Gráfica</div>
+
+    <div class="yt-tip">▶ <div>Não entendeu? Pesquise no YouTube: <strong>"gráfico de barras histograma estatística"</strong></div></div>
+
+    <div class="card">
+      <div class="card-title">📊 Quando usar cada gráfico?</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Tipo de dado</th><th>Gráfico indicado</th><th>Por quê</th></tr>
+          <tr><td class="hi">Variável discreta</td><td>Barras (ou colunas)</td><td>Valores separados, sem continuidade</td></tr>
+          <tr><td class="hi">Variável contínua</td><td>Histograma</td><td>Classes contínuas, barras sem espaço</td></tr>
+          <tr><td class="hi">Série temporal</td><td>Linha</td><td>Mostra evolução ao longo do tempo</td></tr>
+          <tr><td class="hi">Partes do todo</td><td>Pizza (setor)</td><td>Mostra proporções/percentuais</td></tr>
+        </table>
+      </div>
+      <div class="hint"><strong>Diferença principal:</strong> no histograma as barras ficam coladas (dados contínuos). No gráfico de barras ficam separadas (dados discretos).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Gráfico de Barras — Variável Discreta</div>
+      <div class="csub" style="margin-bottom:14px">Faltas de 12 alunos: 0→4×, 1→4×, 2→3×, 3→1×</div>
+      <canvas id="chart-barras" height="200"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Histograma — Variável Contínua</div>
+      <div class="csub" style="margin-bottom:14px">Alturas de 20 alunos agrupadas em classes</div>
+      <canvas id="chart-hist" height="200"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Gráfico de Linha — Série Temporal</div>
+      <div class="csub" style="margin-bottom:14px">Alunos formados na UNIP por ano</div>
+      <canvas id="chart-linha" height="200"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Gráfico de Pizza — Proporções</div>
+      <div class="csub" style="margin-bottom:14px">Distribuição de alunos por curso na UNIP (2025)</div>
+      <canvas id="chart-pizza" height="220"></canvas>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- REVISÃO COMPLETA -->
+  <div id="revisao" class="panel">
+  <div class="content">
+    <div class="stag">Exercício do professor</div>
+    <div class="sh">Revisão Completa — Aula 5</div>
+
+    <div class="papel-tip">✏️ <div><strong>Este é o exercício mais importante!</strong> O professor colocou esse na revisão da Aula 5. Resolve no papel antes de ver a resposta.</div></div>
+
+    <div class="card">
+      <div class="card-title">📋 Enunciado</div>
+      <div class="csub">Tempo de resposta de um servidor (ms) — foram registradas 24 medições:<br><br>
+        <strong style="color:var(--a);font-family:var(--mono)">100, 110, 115, 120, 125, 105, 130, 135, 140, 145, 150, 170, 155, 160, 165, 170, 175, 250, 180, 185, 190, 195, 200, 67</strong><br><br>
+        Determine: a) Média &nbsp; b) Moda &nbsp; c) Mediana &nbsp; d) Frequências &nbsp; e) Desvio médio &nbsp; f) Variância &nbsp; g) Desvio padrão
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 1 — Monte o Rol</div>
+      <div class="csub">Organize os 24 valores em ordem crescente:</div>
+      <div class="hint2" style="font-family:var(--mono);font-size:13px;line-height:2">
+        67, 100, 105, 110, 115, 120, 125, 130, 135, 140,<br>
+        145, 150, 155, 160, 165, 170, 170, 175, 180, 185,<br>
+        190, 195, 200, 250
+      </div>
+      <div class="hint">n = <strong>24 dados</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 2 — Construa a Tabela de Classes</div>
+      <div class="step"><div class="snum">1</div><div class="stext">AT = 250 − 67 = <strong style="color:var(--a)">183</strong></div></div>
+      <div class="step"><div class="snum">2</div><div class="stext">k = √24 ≈ 4,9 → arredonda para <strong style="color:var(--a)">5 classes</strong></div></div>
+      <div class="step"><div class="snum">3</div><div class="stext">h = 183 ÷ 5 = 36,6 → arredonda para <strong style="color:var(--a)">37</strong></div></div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>Classe (ms)</th><th>fi</th><th>Fi</th><th>fri</th><th>%</th><th>xi</th><th>xi×fi</th></tr>
+          <tr><td>67 – 104</td><td class="hi">2</td><td>2</td><td>0,08</td><td>8,3%</td><td>85,5</td><td>171</td></tr>
+          <tr><td>104 – 141</td><td class="hi">7</td><td>9</td><td>0,29</td><td>29,2%</td><td>122,5</td><td>857,5</td></tr>
+          <tr><td>141 – 178</td><td class="hi">8</td><td>17</td><td>0,33</td><td>33,3%</td><td>159,5</td><td>1276</td></tr>
+          <tr><td>178 – 215</td><td class="hi">6</td><td>23</td><td>0,25</td><td>25,0%</td><td>196,5</td><td>1179</td></tr>
+          <tr><td>215 – 252</td><td class="hi">1</td><td>24</td><td>0,04</td><td>4,2%</td><td>233,5</td><td>233,5</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>24</strong></td><td>—</td><td><strong>1,00</strong></td><td><strong>100%</strong></td><td>—</td><td><strong>3717</strong></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 3 — Média</div>
+      <div class="fbox">
+        <div class="ftitle">Média agrupada</div>
+        <div class="fmain">x̄ = Σ(xi × fi) ÷ n = 3717 ÷ 24 ≈ 154,9 ms</div>
+      </div>
+      <div class="hint"><strong>Resposta: x̄ ≈ 154,9 ms</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 4 — Moda</div>
+      <div class="csub">A classe com maior frequência é <strong style="color:var(--a)">141–178</strong> (fi=8).<br><br>
+      No rol: o valor <strong style="color:var(--a)">170</strong> aparece 2 vezes — é o único que se repete.</div>
+      <div class="hint"><strong>Moda = 170 ms</strong> (unimodal)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 5 — Mediana (dados agrupados)</div>
+      <div class="csub" style="margin-bottom:10px">n = 24 → n/2 = <strong>12</strong></div>
+      <div class="hint2">A classe mediana é a primeira onde Fi ≥ 12.<br>
+        Fi da classe 104–141 = 9 (ainda &lt; 12)<br>
+        Fi da classe 141–178 = 17 (≥ 12) ✓ → <strong>Classe mediana = 141–178</strong>
+      </div>
+      <div class="fbox">
+        <div class="ftitle">Aplicando a fórmula: Md = L + [(n/2 − Fi₋₁) ÷ fi] × h</div>
+        <div class="fmain">Md = 141 + [(12 − 9) ÷ 8] × 37</div>
+        <table>
+          <tr><td>L</td><td>141 — limite inferior da classe mediana</td></tr>
+          <tr><td>n/2</td><td>12 — metade do total de dados</td></tr>
+          <tr><td>Fi₋₁</td><td>9 — frequência acumulada da classe ANTERIOR (104–141)</td></tr>
+          <tr><td>fi</td><td>8 — frequência da classe mediana (141–178)</td></tr>
+          <tr><td>h</td><td>37 — amplitude da classe</td></tr>
+        </table>
+      </div>
+      <div class="hint">Md = 141 + (3÷8) × 37 = 141 + 0,375 × 37 = 141 + 13,9 = <strong>154,9 ms</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Passo 6 — Desvio Médio, Variância e Desvio Padrão</div>
+      <div class="csub" style="margin-bottom:10px">Usando a média x̄ = 154,9 e os pontos médios de cada classe:</div>
+      <div class="tbl-wrap">
+        <table class="std">
+          <tr><th>xi</th><th>fi</th><th>xi−x̄</th><th>|xi−x̄|</th><th>fi×|xi−x̄|</th><th>(xi−x̄)²</th><th>fi×(xi−x̄)²</th></tr>
+          <tr><td>85,5</td><td>2</td><td>−69,4</td><td>69,4</td><td class="hi">138,8</td><td>4816,4</td><td class="hi">9632,8</td></tr>
+          <tr><td>122,5</td><td>7</td><td>−32,4</td><td>32,4</td><td class="hi">226,8</td><td>1049,8</td><td class="hi">7348,6</td></tr>
+          <tr><td>159,5</td><td>8</td><td>+4,6</td><td>4,6</td><td class="hi">36,8</td><td>21,2</td><td class="hi">169,6</td></tr>
+          <tr><td>196,5</td><td>6</td><td>+41,6</td><td>41,6</td><td class="hi">249,6</td><td>1730,6</td><td class="hi">10383,6</td></tr>
+          <tr><td>233,5</td><td>1</td><td>+78,6</td><td>78,6</td><td class="hi">78,6</td><td>6177,9</td><td class="hi">6177,9</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>24</strong></td><td>—</td><td>—</td><td><strong>730,6</strong></td><td>—</td><td><strong>33712,5</strong></td></tr>
+        </table>
+      </div>
+      <div class="fbox" style="margin-top:12px">
+        <div class="ftitle">Resultados</div>
+        <div class="fmain">DM = 730,6 ÷ 24 ≈ 30,4 ms</div>
+        <table>
+          <tr><td>σ²</td><td>Variância = 33712,5 ÷ 24 ≈ 1404,7 ms²</td></tr>
+          <tr><td>σ</td><td>Desvio Padrão = √1404,7 ≈ 37,5 ms</td></tr>
+        </table>
+      </div>
+      <div class="hint3"><strong>Interpretação:</strong> os tempos de resposta do servidor variam em média 37,5 ms em relação à média de 154,9 ms. O valor 250ms e o 67ms são os que mais puxam essa dispersão.</div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- EXERCÍCIOS -->
+  <div id="exercicios" class="panel">
+  <div class="content">
+
+    <div class="score-panel">
+      <div>
+        <div class="score-big" id="xp-total">0 XP</div>
+        <div class="score-label">pontos acumulados</div>
+      </div>
+      <div class="score-info">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;font-family:var(--mono)">
+          <span>Progresso</span><span id="ex-prog-txt">0 / 22 respondidos</span>
+        </div>
+        <div class="xp-bar-wrap"><div class="xp-bar" id="ex-bar" style="width:0%"></div></div>
+        <div class="prog-text" id="prog-msg">Responda os exercícios para ganhar XP!</div>
+      </div>
+    </div>
+
+    <div class="papel-tip">✏️ <div><strong>Dica:</strong> Nos exercícios de tabela, tente montar no papel primeiro depois preencha aqui. As células ficam verdes quando corretas e vermelhas quando erradas — célula por célula!</div></div>
+
+    <!-- NÍVEL 1 -->
+    <div class="level-header">
+      <div class="level-badge">NÍVEL 1</div>
+      <div class="level-title">Conceitos</div>
+      <div class="level-xp">10 XP / questão</div>
+    </div>
+
+    <div class="ex-card" id="ex1">
+      <div class="ex-num">QUESTÃO 01 · Múltipla escolha</div>
+      <div class="ex-q">Um professor sorteia 40 alunos de uma turma de 180 para verificar a média das notas. Os 40 alunos sorteados são chamados de:</div>
+      <div class="mc-opts" id="mc-ex1">
+        <button class="mc-opt" onclick="checkMC('ex1',this,false)">a) População</button>
+        <button class="mc-opt" onclick="checkMC('ex1',this,true)">b) Amostra</button>
+        <button class="mc-opt" onclick="checkMC('ex1',this,false)">c) Censo</button>
+        <button class="mc-opt" onclick="checkMC('ex1',this,false)">d) Parâmetro</button>
+      </div>
+      <div class="fb-msg" id="fb-ex1"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex1')">Ver explicação</button>
+      <div class="gabarito" id="g-ex1"><strong>b) Amostra</strong> — é a parte selecionada da população (180 alunos). O sorteio foi o método de amostragem.</div>
+    </div>
+
+    <div class="ex-card" id="ex2">
+      <div class="ex-num">QUESTÃO 02 · Múltipla escolha</div>
+      <div class="ex-q">Tabela mostra formados na UNIP nos anos 2021, 2022, 2023 e 2024. Que tipo de série estatística é essa?</div>
+      <div class="mc-opts" id="mc-ex2">
+        <button class="mc-opt" onclick="checkMC('ex2',this,false)">a) Geográfica</button>
+        <button class="mc-opt" onclick="checkMC('ex2',this,false)">b) Específica</button>
+        <button class="mc-opt" onclick="checkMC('ex2',this,true)">c) Temporal</button>
+        <button class="mc-opt" onclick="checkMC('ex2',this,false)">d) Mista</button>
+      </div>
+      <div class="fb-msg" id="fb-ex2"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex2')">Ver explicação</button>
+      <div class="gabarito" id="g-ex2"><strong>c) Temporal</strong> — o que varia é o tempo (anos). Fato e local são fixos. Pergunta-se sempre: "o que está mudando?"</div>
+    </div>
+
+    <div class="ex-card" id="ex3">
+      <div class="ex-num">QUESTÃO 03 · Múltipla escolha</div>
+      <div class="ex-q">Altura (1,72 m) é exemplo de variável:</div>
+      <div class="mc-opts" id="mc-ex3">
+        <button class="mc-opt" onclick="checkMC('ex3',this,false)">a) Discreta — valores fixos</button>
+        <button class="mc-opt" onclick="checkMC('ex3',this,true)">b) Contínua — qualquer valor num intervalo</button>
+        <button class="mc-opt" onclick="checkMC('ex3',this,false)">c) Discreta — resultado de contagem</button>
+        <button class="mc-opt" onclick="checkMC('ex3',this,false)">d) Qualitativa — descreve uma qualidade</button>
+      </div>
+      <div class="fb-msg" id="fb-ex3"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex3')">Ver explicação</button>
+      <div class="gabarito" id="g-ex3"><strong>b) Contínua</strong> — altura é resultado de medição e pode ter infinitas casas decimais. Discreta é contagem e assume valores inteiros.</div>
+    </div>
+
+    <div class="ex-card" id="ex4">
+      <div class="ex-num">QUESTÃO 04 · Múltipla escolha</div>
+      <div class="ex-q">O governo coleta dados de todos os cidadãos do Brasil para o IBGE. Isso é um exemplo de:</div>
+      <div class="mc-opts" id="mc-ex4">
+        <button class="mc-opt" onclick="checkMC('ex4',this,false)">a) Amostragem estratificada</button>
+        <button class="mc-opt" onclick="checkMC('ex4',this,false)">b) Amostra aleatória</button>
+        <button class="mc-opt" onclick="checkMC('ex4',this,true)">c) Censo</button>
+        <button class="mc-opt" onclick="checkMC('ex4',this,false)">d) Série específica</button>
+      </div>
+      <div class="fb-msg" id="fb-ex4"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex4')">Ver explicação</button>
+      <div class="gabarito" id="g-ex4"><strong>c) Censo</strong> — coleta dados de TODOS os elementos da população, sem exceção. Mais preciso, porém mais caro e demorado.</div>
+    </div>
+
+    <!-- NÍVEL 2 -->
+    <div class="level-header">
+      <div class="level-badge l2">NÍVEL 2</div>
+      <div class="level-title">Frequências — Tabelas</div>
+      <div class="level-xp">15 XP / questão</div>
+    </div>
+
+    <!-- EX5: tabela discreta completa -->
+    <div class="ex-card" id="ex5">
+      <div class="ex-num">QUESTÃO 05 · Tabela Interativa</div>
+      <div class="ex-q">Faltas de 12 alunos: 0,1,2,0,3,1,2,1,0,2,1,0. Preencha a tabela de frequência completa:</div>
+      <div class="ex-hint-box">Rol: 0,0,0,0,1,1,1,1,2,2,2,3 | n=12 | fi=contagem | Fi=acumulada | fri=fi÷12 | %=fri×100</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>Faltas</th><th>fi</th><th>Fi</th><th>fri</th><th>%</th></tr>
+          <tr>
+            <td>0</td>
+            <td><input class="tbl-inp" data-ans="4" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="4" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="0,33" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="33" data-ex="ex5" placeholder="?"></td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><input class="tbl-inp" data-ans="4" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="8" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="0,33" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="33" data-ex="ex5" placeholder="?"></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><input class="tbl-inp" data-ans="3" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="11" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="0,25" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="25" data-ex="ex5" placeholder="?"></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><input class="tbl-inp" data-ans="1" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="12" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="0,08" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="8" data-ex="ex5" placeholder="?"></td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td><input class="tbl-inp" data-ans="12" data-ex="ex5" placeholder="?"></td>
+            <td>—</td>
+            <td><input class="tbl-inp" data-ans="1" data-ex="ex5" placeholder="?"></td>
+            <td><input class="tbl-inp" data-ans="100" data-ex="ex5" placeholder="?"></td>
+          </tr>
+        </table>
+      </div>
+      <button class="btn btn-primary" onclick="checkTyped('ex5',15)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex5')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex5')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex5">0→fi=4,Fi=4,fri=0,33,%=33 | 1→fi=4,Fi=8,fri=0,33,%=33 | 2→fi=3,Fi=11,fri=0,25,%=25 | 3→fi=1,Fi=12,fri=0,08,%=8 | Total→fi=12,fri=1,%=100</div>
+    </div>
+
+    <!-- EX6: MC frequência -->
+    <div class="ex-card" id="ex6">
+      <div class="ex-num">QUESTÃO 06 · Múltipla escolha</div>
+      <div class="ex-q">Em uma tabela com n=30 e fi=6 para uma classe, qual é a frequência relativa (fri)?</div>
+      <div class="mc-opts" id="mc-ex6">
+        <button class="mc-opt" onclick="checkMC('ex6',this,false)">a) 0,06</button>
+        <button class="mc-opt" onclick="checkMC('ex6',this,true)">b) 0,20</button>
+        <button class="mc-opt" onclick="checkMC('ex6',this,false)">c) 20</button>
+        <button class="mc-opt" onclick="checkMC('ex6',this,false)">d) 6,30</button>
+      </div>
+      <div class="fb-msg" id="fb-ex6"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex6')">Ver explicação</button>
+      <div class="gabarito" id="g-ex6">fri = fi÷n = 6÷30 = <strong>0,20</strong>. Frequência relativa vai de 0 a 1. Para % seria 20%.</div>
+    </div>
+
+    <!-- EX7: AT k h + tabela contínua -->
+    <div class="ex-card" id="ex7">
+      <div class="ex-num">QUESTÃO 07 · Tabela Interativa</div>
+      <div class="ex-q">Notas de 30 alunos. Menor=2,5 | Maior=9,5. Calcule AT, k e h, depois preencha a tabela de classes:</div>
+      <div class="ex-hint-box">AT=maior−menor | k=√30≈5,5→6 | h=AT÷k | Ponto médio xi=(inf+sup)÷2</div>
+      <div class="ans-row"><span class="ans-label">AT (Amplitude Total):</span><input class="ans-inp" data-ans="7" data-ex="ex7" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">k (nº de classes — use 6):</span><input class="ans-inp" data-ans="6" data-ex="ex7" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">h (amplitude — AT÷6, arredonde para 1,2):</span><input class="ans-inp" data-ans="1,2" data-ex="ex7" placeholder="?"></div>
+      <div class="tbl-wrap" style="margin-top:12px">
+        <table class="ex-tbl">
+          <tr><th>Classe</th><th>fi</th><th>xi (pont. médio)</th></tr>
+          <tr><td>2,5 – 3,7</td><td><input class="tbl-inp" data-ans="3" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="3,1" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td>3,7 – 4,9</td><td><input class="tbl-inp" data-ans="5" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="4,3" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td>4,9 – 6,1</td><td><input class="tbl-inp" data-ans="9" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="5,5" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td>6,1 – 7,3</td><td><input class="tbl-inp" data-ans="7" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="6,7" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td>7,3 – 8,5</td><td><input class="tbl-inp" data-ans="4" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="7,9" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td>8,5 – 9,7</td><td><input class="tbl-inp" data-ans="2" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="9,1" data-ex="ex7" placeholder="?"></td></tr>
+          <tr><td><strong>Total</strong></td><td><input class="tbl-inp" data-ans="30" data-ex="ex7" placeholder="?"></td><td>—</td></tr>
+        </table>
+      </div>
+      <button class="btn btn-primary" onclick="checkTyped('ex7',15)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex7')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex7')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex7">AT=7 | k=6 | h=1,2 | fi: 3,5,9,7,4,2 (total=30) | xi: 3,1 / 4,3 / 5,5 / 6,7 / 7,9 / 9,1</div>
+    </div>
+
+    <!-- NÍVEL 3 -->
+    <div class="level-header">
+      <div class="level-badge l3">NÍVEL 3</div>
+      <div class="level-title">Tendência Central</div>
+      <div class="level-xp">20 XP / questão</div>
+    </div>
+
+    <!-- EX8: média mediana moda simples -->
+    <div class="ex-card" id="ex8">
+      <div class="ex-num">QUESTÃO 08 · Digitação</div>
+      <div class="ex-q">Notas de 7 alunos: 8, 5, 7, 9, 7, 6, 7. Calcule média, mediana e moda:</div>
+      <div class="ex-hint-box">Rol: 5, 6, 7, 7, 7, 8, 9</div>
+      <div class="ans-row"><span class="ans-label">Soma dos valores:</span><input class="ans-inp" data-ans="49" data-ex="ex8" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Média (x̄):</span><input class="ans-inp" data-ans="7" data-ex="ex8" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Posição da mediana (n=7):</span><input class="ans-inp" data-ans="4" data-ex="ex8" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Mediana (Md):</span><input class="ans-inp" data-ans="7" data-ex="ex8" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Moda (Mo):</span><input class="ans-inp" data-ans="7" data-ex="ex8" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex8',20)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex8')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex8')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex8">Soma=<strong>49</strong> | x̄=49÷7=<strong>7</strong> | pos=(7+1)÷2=<strong>4</strong>ª | Md=<strong>7</strong> | Mo=<strong>7</strong></div>
+    </div>
+
+    <!-- EX9: moda MC -->
+    <div class="ex-card" id="ex9">
+      <div class="ex-num">QUESTÃO 09 · Múltipla escolha</div>
+      <div class="ex-q">O conjunto {3, 5, 5, 5, 6, 6, 7, 7, 7, 11} tem qual tipo de moda?</div>
+      <div class="mc-opts" id="mc-ex9">
+        <button class="mc-opt" onclick="checkMC('ex9',this,false)">a) Amodal</button>
+        <button class="mc-opt" onclick="checkMC('ex9',this,false)">b) Unimodal — Mo=5</button>
+        <button class="mc-opt" onclick="checkMC('ex9',this,true)">c) Bimodal — Mo=5 e 7</button>
+        <button class="mc-opt" onclick="checkMC('ex9',this,false)">d) Multimodal</button>
+      </div>
+      <div class="fb-msg" id="fb-ex9"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex9')">Ver explicação</button>
+      <div class="gabarito" id="g-ex9">5 aparece 3× e 7 aparece 3× — empatam → <strong>bimodal</strong>, Mo=5 e 7.</div>
+    </div>
+
+    <!-- EX10: mediana par MC -->
+    <div class="ex-card" id="ex10">
+      <div class="ex-num">QUESTÃO 10 · Múltipla escolha</div>
+      <div class="ex-q">8 notas ordenadas: 5,5 — 6,0 — 6,5 — 7,0 — 7,5 — 8,5 — 9,0 — 10,0. Qual é a mediana?</div>
+      <div class="mc-opts" id="mc-ex10">
+        <button class="mc-opt" onclick="checkMC('ex10',this,false)">a) 7,0</button>
+        <button class="mc-opt" onclick="checkMC('ex10',this,true)">b) 7,25</button>
+        <button class="mc-opt" onclick="checkMC('ex10',this,false)">c) 7,5</button>
+        <button class="mc-opt" onclick="checkMC('ex10',this,false)">d) 8,0</button>
+      </div>
+      <div class="fb-msg" id="fb-ex10"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex10')">Ver explicação</button>
+      <div class="gabarito" id="g-ex10">n=8 par → posições 4ª(7,0) e 5ª(7,5) → Md=(7,0+7,5)÷2=<strong>7,25</strong></div>
+    </div>
+
+    <!-- EX11: média agrupada tabela interativa -->
+    <div class="ex-card" id="ex11">
+      <div class="ex-num">QUESTÃO 11 · Tabela Interativa</div>
+      <div class="ex-q">Preencha a coluna xi×fi e calcule a média agrupada (n=20):</div>
+      <div class="ex-hint-box">xi×fi = ponto médio × frequência | Some a coluna e divida por n</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>Classe (ms)</th><th>fi</th><th>xi</th><th>xi × fi</th></tr>
+          <tr><td>100–120</td><td>4</td><td>110</td><td><input class="tbl-inp" data-ans="440" data-ex="ex11" placeholder="?"></td></tr>
+          <tr><td>120–140</td><td>4</td><td>130</td><td><input class="tbl-inp" data-ans="520" data-ex="ex11" placeholder="?"></td></tr>
+          <tr><td>140–160</td><td>4</td><td>150</td><td><input class="tbl-inp" data-ans="600" data-ex="ex11" placeholder="?"></td></tr>
+          <tr><td>160–180</td><td>4</td><td>170</td><td><input class="tbl-inp" data-ans="680" data-ex="ex11" placeholder="?"></td></tr>
+          <tr><td>180–200</td><td>4</td><td>190</td><td><input class="tbl-inp" data-ans="760" data-ex="ex11" placeholder="?"></td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>20</strong></td><td>—</td><td><input class="tbl-inp" data-ans="3000" data-ex="ex11" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <div class="ans-row" style="margin-top:10px"><span class="ans-label">Média agrupada (Σxi×fi ÷ n):</span><input class="ans-inp" data-ans="150" data-ex="ex11" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex11',20)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex11')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex11')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex11">xi×fi: 440,520,600,680,760 | Soma=<strong>3000</strong> | x̄=3000÷20=<strong>150 ms</strong></div>
+    </div>
+
+    <!-- EX12: mediana agrupada tabela -->
+    <div class="ex-card" id="ex12">
+      <div class="ex-num">QUESTÃO 12 · Tabela Interativa + Cálculo</div>
+      <div class="ex-q">Preencha a coluna Fi (frequência acumulada) e depois calcule a mediana agrupada (n=40):</div>
+      <div class="ex-hint-box">Fi = soma das fi até aquela linha | Classe mediana: primeira onde Fi ≥ n/2=20</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>Classe</th><th>fi</th><th>Fi</th></tr>
+          <tr><td>4–5</td><td>3</td><td><input class="tbl-inp" data-ans="3" data-ex="ex12" placeholder="?"></td></tr>
+          <tr><td>5–6</td><td>6</td><td><input class="tbl-inp" data-ans="9" data-ex="ex12" placeholder="?"></td></tr>
+          <tr><td>6–7</td><td>10</td><td><input class="tbl-inp" data-ans="19" data-ex="ex12" placeholder="?"></td></tr>
+          <tr><td>7–8</td><td>9</td><td><input class="tbl-inp" data-ans="28" data-ex="ex12" placeholder="?"></td></tr>
+          <tr><td>8–9</td><td>8</td><td><input class="tbl-inp" data-ans="36" data-ex="ex12" placeholder="?"></td></tr>
+          <tr><td>9–10</td><td>4</td><td><input class="tbl-inp" data-ans="40" data-ex="ex12" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <div class="ans-row" style="margin-top:10px"><span class="ans-label">Qual é a classe mediana?</span><input class="ans-inp" style="width:80px" data-ans="7–8" data-ex="ex12" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">L (limite inferior da classe mediana):</span><input class="ans-inp" data-ans="7" data-ex="ex12" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Fi₋₁ (Fi da classe anterior):</span><input class="ans-inp" data-ans="19" data-ex="ex12" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Mediana Md = 7 + [(20−19)÷9]×1:</span><input class="ans-inp" data-ans="7,11" data-ex="ex12" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex12',20)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex12')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex12')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex12">Fi: 3,9,19,28,36,40 | Classe mediana=<strong>7–8</strong> (Fi=28≥20) | L=7, Fi₋₁=19, fi=9, h=1 | Md=7+[(20−19)÷9]×1=7+0,11=<strong>7,11</strong></div>
+    </div>
+
+    <!-- NÍVEL 4 -->
+    <div class="level-header">
+      <div class="level-badge l4">NÍVEL 4</div>
+      <div class="level-title">Dispersão</div>
+      <div class="level-xp">25 XP / questão</div>
+    </div>
+
+    <!-- EX13: desvio médio MC -->
+    <div class="ex-card" id="ex13">
+      <div class="ex-num">QUESTÃO 13 · Múltipla escolha</div>
+      <div class="ex-q">Duas turmas têm média 7. Turma A tem desvio padrão 0,5 e Turma B tem 3,2. O que isso indica?</div>
+      <div class="mc-opts" id="mc-ex13">
+        <button class="mc-opt" onclick="checkMC('ex13',this,false)">a) Turma B tem melhor desempenho</button>
+        <button class="mc-opt" onclick="checkMC('ex13',this,true)">b) Turma A tem notas mais concentradas perto da média</button>
+        <button class="mc-opt" onclick="checkMC('ex13',this,false)">c) As turmas são iguais pois a média é a mesma</button>
+        <button class="mc-opt" onclick="checkMC('ex13',this,false)">d) Turma A tem notas mais espalhadas</button>
+      </div>
+      <div class="fb-msg" id="fb-ex13"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex13')">Ver explicação</button>
+      <div class="gabarito" id="g-ex13">Desvio padrão menor = dados mais concentrados. Turma A (σ=0,5) tem notas próximas. Turma B (σ=3,2) tem notas espalhadas.</div>
+    </div>
+
+    <!-- EX14: tabela desvio médio e variância interativa -->
+    <div class="ex-card" id="ex14">
+      <div class="ex-num">QUESTÃO 14 · Tabela Interativa</div>
+      <div class="ex-q">Dados: 4, 6, 8, 10, 12. x̄=8. Preencha a tabela de dispersão e calcule DM, variância e desvio padrão:</div>
+      <div class="ex-hint-box">xi−x̄ = valor menos média | |xi−x̄| = valor absoluto (sempre positivo) | (xi−x̄)² = ao quadrado</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>xi</th><th>xi − x̄</th><th>|xi − x̄|</th><th>(xi − x̄)²</th></tr>
+          <tr><td>4</td><td><input class="tbl-inp" data-ans="-4" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="16" data-ex="ex14" placeholder="?"></td></tr>
+          <tr><td>6</td><td><input class="tbl-inp" data-ans="-2" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="2" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex14" placeholder="?"></td></tr>
+          <tr><td>8</td><td><input class="tbl-inp" data-ans="0" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex14" placeholder="?"></td></tr>
+          <tr><td>10</td><td><input class="tbl-inp" data-ans="2" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="2" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex14" placeholder="?"></td></tr>
+          <tr><td>12</td><td><input class="tbl-inp" data-ans="4" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="16" data-ex="ex14" placeholder="?"></td></tr>
+          <tr><td><strong>Soma</strong></td><td>—</td><td><input class="tbl-inp" data-ans="12" data-ex="ex14" placeholder="?"></td><td><input class="tbl-inp" data-ans="40" data-ex="ex14" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <div class="ans-row" style="margin-top:10px"><span class="ans-label">Desvio Médio (DM = Σ|xi−x̄|÷5):</span><input class="ans-inp" data-ans="2,4" data-ex="ex14" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Variância (σ² = Σ(xi−x̄)²÷5):</span><input class="ans-inp" data-ans="8" data-ex="ex14" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Desvio Padrão (σ = √8 ≈ 2,83):</span><input class="ans-inp" data-ans="2,83" data-ex="ex14" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex14',25)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex14')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex14')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex14">Desvios: −4,−2,0,+2,+4 | |desvios|: 4,2,0,2,4 soma=<strong>12</strong> | quadrados: 16,4,0,4,16 soma=<strong>40</strong> | DM=12÷5=<strong>2,4</strong> | σ²=40÷5=<strong>8</strong> | σ=<strong>2,83</strong></div>
+    </div>
+
+    <!-- EX15: módulo MC -->
+    <div class="ex-card" id="ex15">
+      <div class="ex-num">QUESTÃO 15 · Múltipla escolha</div>
+      <div class="ex-q">Por que usamos o módulo |xi − x̄| no desvio médio?</div>
+      <div class="mc-opts" id="mc-ex15">
+        <button class="mc-opt" onclick="checkMC('ex15',this,false)">a) Para facilitar o cálculo</button>
+        <button class="mc-opt" onclick="checkMC('ex15',this,true)">b) Sem módulo, desvios negativos e positivos se cancelariam, resultando em zero</button>
+        <button class="mc-opt" onclick="checkMC('ex15',this,false)">c) Valores negativos não existem em estatística</button>
+        <button class="mc-opt" onclick="checkMC('ex15',this,false)">d) Para o resultado ficar em porcentagem</button>
+      </div>
+      <div class="fb-msg" id="fb-ex15"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex15')">Ver explicação</button>
+      <div class="gabarito" id="g-ex15"><strong>b)</strong> — sem módulo, as distâncias negativas (abaixo da média) e positivas (acima) se cancelariam e a soma seria sempre zero. O módulo garante que todas as distâncias sejam positivas.</div>
+    </div>
+
+    <!-- EX16: tabela dispersão completa novas notas -->
+    <div class="ex-card" id="ex16">
+      <div class="ex-num">QUESTÃO 16 · Tabela Interativa</div>
+      <div class="ex-q">Notas de 6 alunos: 5, 6, 7, 8, 9, 7. x̄=7. Preencha a tabela e calcule variância e desvio padrão:</div>
+      <div class="ex-hint-box">(xi−x̄)² = diferença ao quadrado | σ²=Σ(xi−x̄)²÷n | σ=√σ²</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>xi</th><th>xi−x̄</th><th>(xi−x̄)²</th></tr>
+          <tr><td>5</td><td><input class="tbl-inp" data-ans="-2" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td>6</td><td><input class="tbl-inp" data-ans="-1" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="1" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td>7</td><td><input class="tbl-inp" data-ans="0" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td>8</td><td><input class="tbl-inp" data-ans="1" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="1" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td>9</td><td><input class="tbl-inp" data-ans="2" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td>7</td><td><input class="tbl-inp" data-ans="0" data-ex="ex16" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex16" placeholder="?"></td></tr>
+          <tr><td><strong>Soma</strong></td><td>—</td><td><input class="tbl-inp" data-ans="10" data-ex="ex16" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <div class="ans-row" style="margin-top:10px"><span class="ans-label">Variância (σ² = soma÷6):</span><input class="ans-inp" data-ans="1,67" data-ex="ex16" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Desvio Padrão (σ = √1,67 ≈ 1,29):</span><input class="ans-inp" data-ans="1,29" data-ex="ex16" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex16',25)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex16')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex16')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex16">desvios: −2,−1,0,+1,+2,0 | quadrados: 4,1,0,1,4,0 soma=<strong>10</strong> | σ²=10÷6≈<strong>1,67</strong> | σ=√1,67≈<strong>1,29</strong></div>
+    </div>
+
+    <!-- EX17: DP zero MC -->
+    <div class="ex-card" id="ex17">
+      <div class="ex-num">QUESTÃO 17 · Múltipla escolha</div>
+      <div class="ex-q">Dados: 5, 5, 5, 5, 5. Qual é o desvio padrão?</div>
+      <div class="mc-opts" id="mc-ex17">
+        <button class="mc-opt" onclick="checkMC('ex17',this,true)">a) 0 — todos os valores são iguais à média</button>
+        <button class="mc-opt" onclick="checkMC('ex17',this,false)">b) 5 — igual à média</button>
+        <button class="mc-opt" onclick="checkMC('ex17',this,false)">c) 25 — média ao quadrado</button>
+        <button class="mc-opt" onclick="checkMC('ex17',this,false)">d) 1 — sempre mínimo</button>
+      </div>
+      <div class="fb-msg" id="fb-ex17"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex17')">Ver explicação</button>
+      <div class="gabarito" id="g-ex17"><strong>a) 0</strong> — todos desvios são 0, variância=0, σ=0. Desvio padrão zero = dados idênticos, sem espalhamento.</div>
+    </div>
+
+    <!-- EX18: variância MC relação -->
+    <div class="ex-card" id="ex18">
+      <div class="ex-num">QUESTÃO 18 · Múltipla escolha</div>
+      <div class="ex-q">Variância de um conjunto é 16. Qual é o desvio padrão?</div>
+      <div class="mc-opts" id="mc-ex18">
+        <button class="mc-opt" onclick="checkMC('ex18',this,false)">a) 256</button>
+        <button class="mc-opt" onclick="checkMC('ex18',this,false)">b) 8</button>
+        <button class="mc-opt" onclick="checkMC('ex18',this,true)">c) 4</button>
+        <button class="mc-opt" onclick="checkMC('ex18',this,false)">d) 16</button>
+      </div>
+      <div class="fb-msg" id="fb-ex18"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex18')">Ver explicação</button>
+      <div class="gabarito" id="g-ex18">σ = √variância = √16 = <strong>4</strong>. Sempre que a variância for um quadrado perfeito, o DP é a raiz exata.</div>
+    </div>
+
+    <!-- NÍVEL 5 BONUS -->
+    <div class="level-header">
+      <div class="level-badge" style="background:#c084fc;color:#000">BÔNUS</div>
+      <div class="level-title">Exercício Completo</div>
+      <div class="level-xp">30 XP / questão</div>
+    </div>
+
+    <!-- EX19: exercício completo igual ao professor -->
+    <div class="ex-card" id="ex19">
+      <div class="ex-num">QUESTÃO 19 · Exercício Completo (estilo prova)</div>
+      <div class="ex-q">Idades de 10 alunos: 18, 20, 19, 21, 20, 22, 18, 20, 21, 19. Calcule tudo:</div>
+      <div class="ex-hint-box">Rol: 18,18,19,19,20,20,20,21,21,22 | n=10</div>
+      <div class="ans-row"><span class="ans-label">Soma dos valores:</span><input class="ans-inp" data-ans="198" data-ex="ex19" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Média (x̄):</span><input class="ans-inp" data-ans="19,8" data-ex="ex19" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Mediana (n=10 par — posições 5ª e 6ª):</span><input class="ans-inp" data-ans="20" data-ex="ex19" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Moda (Mo):</span><input class="ans-inp" data-ans="20" data-ex="ex19" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Tipo da moda:</span><input class="ans-inp" style="width:130px" data-ans="unimodal" data-ex="ex19" placeholder="?"></div>
+      <div class="tbl-wrap" style="margin-top:12px">
+        <table class="ex-tbl">
+          <tr><th>xi</th><th>fi</th><th>Fi</th><th>fri</th><th>%</th></tr>
+          <tr><td>18</td><td><input class="tbl-inp" data-ans="2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="0,2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="20" data-ex="ex19" placeholder="?"></td></tr>
+          <tr><td>19</td><td><input class="tbl-inp" data-ans="2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="0,2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="20" data-ex="ex19" placeholder="?"></td></tr>
+          <tr><td>20</td><td><input class="tbl-inp" data-ans="3" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="7" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="0,3" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="30" data-ex="ex19" placeholder="?"></td></tr>
+          <tr><td>21</td><td><input class="tbl-inp" data-ans="2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="9" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="0,2" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="20" data-ex="ex19" placeholder="?"></td></tr>
+          <tr><td>22</td><td><input class="tbl-inp" data-ans="1" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="10" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="0,1" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="10" data-ex="ex19" placeholder="?"></td></tr>
+          <tr><td><strong>Total</strong></td><td><input class="tbl-inp" data-ans="10" data-ex="ex19" placeholder="?"></td><td>—</td><td><input class="tbl-inp" data-ans="1" data-ex="ex19" placeholder="?"></td><td><input class="tbl-inp" data-ans="100" data-ex="ex19" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex19',30)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex19')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex19')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex19">Soma=198 | x̄=19,8 | posições 5ª(20) e 6ª(20) → Md=20 | Mo=20 unimodal | Tabela: 18→2,2,0,2,20 | 19→2,4,0,2,20 | 20→3,7,0,3,30 | 21→2,9,0,2,20 | 22→1,10,0,1,10</div>
+    </div>
+
+    <!-- EX20: dispersão completa tabela -->
+    <div class="ex-card" id="ex20">
+      <div class="ex-num">QUESTÃO 20 · Tabela Completa de Dispersão (estilo prova)</div>
+      <div class="ex-q">Dados: 2, 4, 6, 8, 10. x̄=6. Preencha tudo e calcule DM, variância e DP:</div>
+      <div class="tbl-wrap">
+        <table class="ex-tbl">
+          <tr><th>xi</th><th>xi−x̄</th><th>|xi−x̄|</th><th>(xi−x̄)²</th></tr>
+          <tr><td>2</td><td><input class="tbl-inp" data-ans="-4" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="16" data-ex="ex20" placeholder="?"></td></tr>
+          <tr><td>4</td><td><input class="tbl-inp" data-ans="-2" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="2" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex20" placeholder="?"></td></tr>
+          <tr><td>6</td><td><input class="tbl-inp" data-ans="0" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="0" data-ex="ex20" placeholder="?"></td></tr>
+          <tr><td>8</td><td><input class="tbl-inp" data-ans="2" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="2" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex20" placeholder="?"></td></tr>
+          <tr><td>10</td><td><input class="tbl-inp" data-ans="4" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="4" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="16" data-ex="ex20" placeholder="?"></td></tr>
+          <tr><td><strong>Soma</strong></td><td>—</td><td><input class="tbl-inp" data-ans="12" data-ex="ex20" placeholder="?"></td><td><input class="tbl-inp" data-ans="40" data-ex="ex20" placeholder="?"></td></tr>
+        </table>
+      </div>
+      <div class="ans-row" style="margin-top:10px"><span class="ans-label">Desvio Médio (DM):</span><input class="ans-inp" data-ans="2,4" data-ex="ex20" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Variância (σ²):</span><input class="ans-inp" data-ans="8" data-ex="ex20" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">Desvio Padrão (σ ≈ 2,83):</span><input class="ans-inp" data-ans="2,83" data-ex="ex20" placeholder="?"></div>
+      <br>
+      <button class="btn btn-primary" onclick="checkTyped('ex20',30)">VERIFICAR</button>
+      <button class="btn btn-ghost" onclick="resetTyped('ex20')">LIMPAR</button>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex20')">Ver gabarito</button>
+      <div class="gabarito" id="g-ex20">desvios: −4,−2,0,+2,+4 | |dev|: 4,2,0,2,4 soma=<strong>12</strong> | quad: 16,4,0,4,16 soma=<strong>40</strong> | DM=<strong>2,4</strong> | σ²=<strong>8</strong> | σ≈<strong>2,83</strong></div>
+    </div>
+
+    <!-- EX21: MC final -->
+    <div class="ex-card" id="ex21">
+      <div class="ex-num">QUESTÃO 21 · Múltipla escolha</div>
+      <div class="ex-q">Qual medida de dispersão tem a MESMA unidade dos dados originais e é a mais usada na prática?</div>
+      <div class="mc-opts" id="mc-ex21">
+        <button class="mc-opt" onclick="checkMC('ex21',this,false)">a) Variância — fica na unidade ao quadrado</button>
+        <button class="mc-opt" onclick="checkMC('ex21',this,false)">b) Desvio Médio — usa módulo</button>
+        <button class="mc-opt" onclick="checkMC('ex21',this,true)">c) Desvio Padrão — raiz da variância, mesma unidade</button>
+        <button class="mc-opt" onclick="checkMC('ex21',this,false)">d) Frequência Relativa — representa proporção</button>
+      </div>
+      <div class="fb-msg" id="fb-ex21"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex21')">Ver explicação</button>
+      <div class="gabarito" id="g-ex21"><strong>c) Desvio Padrão</strong> — é a raiz quadrada da variância, voltando para a mesma unidade dos dados. É o mais usado na prática justamente por isso — facilita a interpretação.</div>
+    </div>
+
+    <!-- EX22: MC série -->
+    <div class="ex-card" id="ex22">
+      <div class="ex-num">QUESTÃO 22 · Múltipla escolha</div>
+      <div class="ex-q">Tabela mostra vendas de cada produto (notebook, celular, tablet) na mesma loja em 2025. Que tipo de série é essa?</div>
+      <div class="mc-opts" id="mc-ex22">
+        <button class="mc-opt" onclick="checkMC('ex22',this,false)">a) Temporal — varia o tempo</button>
+        <button class="mc-opt" onclick="checkMC('ex22',this,false)">b) Geográfica — varia o local</button>
+        <button class="mc-opt" onclick="checkMC('ex22',this,true)">c) Específica — varia a categoria (produto)</button>
+        <button class="mc-opt" onclick="checkMC('ex22',this,false)">d) Mista — varia mais de um elemento</button>
+      </div>
+      <div class="fb-msg" id="fb-ex22"></div>
+      <button class="btn btn-blue" onclick="toggleGab('g-ex22')">Ver explicação</button>
+      <div class="gabarito" id="g-ex22"><strong>c) Específica</strong> — o que varia é a categoria (produto: notebook, celular, tablet). Local (mesma loja) e época (2025) são fixos.</div>
+    </div>
+
+  </div>
+  </div>
+
+  <div class="insta-bar">
+    <a href="https://instagram.com/yuril06" target="_blank">feito por @yuril06 · segue lá 🤙</a>
+  </div>
+</div>
+
+<a class="gpt-btn" id="gpt-link" href="#" target="_blank" onclick="openGPT()">
+  <svg class="gpt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+  Tirar dúvida no ChatGPT
+</a>
+</div>
+
+<script>
+const TOTAL_EX = 22;
+let state = {name:'', xp:0, answered:{}};
+
+function saveState(){localStorage.setItem('resumonp1_v1', JSON.stringify(state))}
+function loadState(){const s=localStorage.getItem('resumonp1_v1');if(s) state=JSON.parse(s)}
+
+function startApp(){
+  const n=document.getElementById('login-name').value.trim();
+  if(!n){alert('Digite seu nome!');return}
+  state.name=n;saveState();launchMain();
+}
+
+function launchMain(){
+  document.getElementById('s-login').classList.remove('active');
+  document.getElementById('s-main').classList.add('active');
+  document.getElementById('hd-name').textContent=state.name;
+  updateScore();restoreAnswers();
+}
+
+function logout(){
+  state.name='';saveState();
+  document.getElementById('s-main').classList.remove('active');
+  document.getElementById('s-login').classList.add('active');
+  document.getElementById('login-name').value='';
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function getXPForEx(exId){
+  const n=parseInt(exId.replace('ex',''));
+  if(n<=4) return 10;
+  if(n<=7) return 15;
+  if(n<=12) return 20;
+  if(n<=18) return 25;
+  return 30;
+}
+
+function addXP(exId){
+  if(state.answered[exId]) return false;
+  state.answered[exId]=true;
+  state.xp+=getXPForEx(exId);
+  saveState();updateScore();
+  showPop('+'+getXPForEx(exId)+' XP!');
+  return true;
+}
+
+function updateScore(){
+  const answered=Object.keys(state.answered).length;
+  const maxXP=4*10+3*15+4*20+5*25;
+  const pct=Math.min(100,Math.round((state.xp/maxXP)*100));
+  document.getElementById('hd-xp').textContent=state.xp;
+  document.getElementById('xp-total').textContent=state.xp+' XP';
+  document.getElementById('ex-bar').style.width=pct+'%';
+  document.getElementById('ex-prog-txt').textContent=answered+' / '+TOTAL_EX+' respondidos';
+  document.getElementById('prog-msg').textContent=
+    answered===TOTAL_EX?'🏆 Parabéns! Todos os exercícios concluídos!':
+    answered+' de '+TOTAL_EX+' respondidos · '+state.xp+' XP acumulado';
+}
+
+function showPop(msg){
+  const p=document.createElement('div');p.className='xp-pop';p.textContent=msg;
+  document.body.appendChild(p);setTimeout(()=>p.remove(),2100);
+}
+
+// MULTIPLE CHOICE — permite tentar de novo se errar
+function checkMC(exId, btn, isCorrect){
+  if(state.answered[exId]) return;
+  const fb=document.getElementById('fb-'+exId);
+  if(isCorrect){
+    btn.classList.add('correct');
+    document.querySelectorAll('#mc-'+exId+' .mc-opt').forEach(b=>b.disabled=true);
+    addXP(exId);
+    fb.textContent='✓ Correto! +'+getXPForEx(exId)+' XP';
+    fb.className='fb-msg ok';
+  } else {
+    btn.classList.add('wrong');
+    btn.disabled=true;
+    fb.textContent='✗ Errado — tente outra opção ou veja a explicação.';
+    fb.className='fb-msg err';
+  }
+}
+
+// TYPED — verifica e permite limpar e tentar de novo
+function checkTyped(exId, xp){
+  const inputs=document.querySelectorAll('.ans-inp[data-ex="'+exId+'"], .tbl-inp[data-ex="'+exId+'"]');
+  let allCorrect=true;
+  inputs.forEach(inp=>{
+    inp.classList.remove('correct','wrong');
+    if(inp.value.trim()===inp.dataset.ans){inp.classList.add('correct')}
+    else if(inp.value.trim()!==''){inp.classList.add('wrong');allCorrect=false}
+    else{allCorrect=false}
+  });
+  if(allCorrect) addXP(exId);
+}
+
+function resetTyped(exId){
+  document.querySelectorAll('.ans-inp[data-ex="'+exId+'"], .tbl-inp[data-ex="'+exId+'"]').forEach(i=>{
+    i.value='';i.classList.remove('correct','wrong');
+  });
+}
+
+function toggleGab(id){document.getElementById(id).classList.toggle('show')}
+
+function restoreAnswers(){
+  Object.keys(state.answered).forEach(exId=>{
+    const fb=document.getElementById('fb-'+exId);
+    if(fb&&!fb.textContent){
+      fb.textContent='✓ Respondido anteriormente! +'+getXPForEx(exId)+' XP';
+      fb.className='fb-msg ok';
+    }
+    const mc=document.getElementById('mc-'+exId);
+    if(mc) mc.querySelectorAll('.mc-opt').forEach(b=>b.disabled=true);
+  });
+}
+
+// CHARTS
+function initCharts(){
+  if(!document.getElementById('chart-barras')) return;
+  const isDark = true;
+  const gridColor = 'rgba(255,255,255,0.06)';
+  const textColor = '#6b7492';
+  const defaults = {
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:gridColor},ticks:{color:textColor}},y:{grid:{color:gridColor},ticks:{color:textColor}}}
+  };
+
+  // Barras
+  new Chart(document.getElementById('chart-barras'),{
+    type:'bar',
+    data:{
+      labels:['0 faltas','1 falta','2 faltas','3 faltas'],
+      datasets:[{data:[4,4,3,1],backgroundColor:['#f5c842','#3ecfff','#4fffb0','#ff5f7e'],borderRadius:6}]
+    },
+    options:{...defaults,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' alunos'}}}}
+  });
+
+  // Histograma
+  new Chart(document.getElementById('chart-hist'),{
+    type:'bar',
+    data:{
+      labels:['1,60–1,64','1,64–1,69','1,69–1,73','1,73–1,78','1,78–1,82'],
+      datasets:[{data:[5,4,4,4,3],backgroundColor:'#3ecfff',borderColor:'#3ecfff',borderRadius:0,barPercentage:1,categoryPercentage:1}]
+    },
+    options:{...defaults,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:textColor}},y:{grid:{color:gridColor},ticks:{color:textColor,stepSize:1}}}}
+  });
+
+  // Linha
+  new Chart(document.getElementById('chart-linha'),{
+    type:'line',
+    data:{
+      labels:['2020','2021','2022','2023','2024'],
+      datasets:[{data:[320,350,400,380,420],borderColor:'#f5c842',backgroundColor:'rgba(245,200,66,0.08)',tension:0.4,fill:true,pointBackgroundColor:'#f5c842',pointRadius:5}]
+    },
+    options:{...defaults}
+  });
+
+  // Pizza
+  new Chart(document.getElementById('chart-pizza'),{
+    type:'doughnut',
+    data:{
+      labels:['ADS','TI','Redes','Computação'],
+      datasets:[{data:[420,380,450,300],backgroundColor:['#f5c842','#3ecfff','#4fffb0','#ff5f7e'],borderWidth:0}]
+    },
+    options:{plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7492',font:{size:12},padding:16}}}}
+  });
+}
+
+function openGPT(){
+  const prompt = encodeURIComponent("Você é um professor de estatística do curso de ADS da UNIP. Me ajude a entender o conteúdo da NP1, que inclui: conceitos básicos (população, amostra, censo, amostragem), distribuição de frequência (fi, Fi, fri, %), medidas de tendência central (média simples, média agrupada, mediana, moda) e medidas de dispersão (desvio médio, variância e desvio padrão). Explique de forma simples e com exemplos práticos. Minha dúvida é: ");
+  window.open("https://chat.openai.com/?q=" + prompt, "_blank");
+  return false;
+}
+
+// INIT
+loadState();
+// load Chart.js and init charts when tab is clicked
+const chartScript = document.createElement('script');
+chartScript.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+chartScript.onload = () => { if(document.getElementById('graficos').classList.contains('active')) initCharts(); };
+document.head.appendChild(chartScript);
+
+// patch showTab to init charts when graficos tab opened
+const _origShowTab = showTab;
+window.showTab = function(id, btn){
+  _origShowTab(id, btn);
+  if(id === 'graficos' && typeof Chart !== 'undefined') setTimeout(initCharts, 50);
+};
+
+document.getElementById('login-name').addEventListener('keydown',e=>{if(e.key==='Enter') startApp()});
+if(state.name){document.getElementById('login-name').value=state.name;launchMain()}
+</script>
+</body>
+</html>
