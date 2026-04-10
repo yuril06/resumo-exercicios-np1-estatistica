@@ -158,6 +158,15 @@ table.ex-tbl{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
 table.ex-tbl th{background:var(--bg3);color:var(--a);font-family:var(--mono);font-size:11px;padding:8px 10px;text-align:center;border-bottom:1px solid var(--border)}
 table.ex-tbl td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:center;color:#c0c4d6;vertical-align:middle}
 table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
+.help-btn{background:transparent;border:1px solid rgba(62,207,255,0.3);border-radius:6px;color:var(--a2);font-size:11px;font-family:var(--mono);padding:3px 10px;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.help-btn:hover{background:rgba(62,207,255,0.1)}
+.help-card{display:none;background:var(--bg3);border:1px solid rgba(62,207,255,0.25);border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#c0c4d6;line-height:1.8}
+.help-card.open{display:block}
+.help-card .hc-title{font-family:var(--mono);font-size:11px;color:var(--a2);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.help-card .hc-step{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start}
+.help-card .hc-num{width:20px;height:20px;border-radius:50%;background:var(--a2);color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:var(--mono)}
+.help-card .hc-warn{background:rgba(245,200,66,0.08);border-left:3px solid var(--a);border-radius:0 6px 6px 0;padding:7px 12px;margin-top:8px;font-size:12px;color:#c0c4d6}
+.help-card .hc-warn strong{color:var(--a)}
 .btn{padding:9px 20px;border-radius:8px;border:none;cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.5px;transition:all .2s;margin-right:6px;margin-top:4px}
 .btn-primary{background:var(--a);color:#000}
 .btn-primary:hover{background:#e6b800}
@@ -1063,7 +1072,35 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <div class="ex-card" id="ex5">
       <div class="ex-num">QUESTÃO 05 · Tabela Interativa</div>
       <div class="ex-q">Faltas de 12 alunos: 0,1,2,0,3,1,2,1,0,2,1,0. Preencha a tabela de frequência completa:</div>
-      <div class="ex-hint-box">Rol: 0,0,0,0,1,1,1,1,2,2,2,3 | n=12 | fi=contagem | Fi=acumulada | fri=fi÷12 | %=fri×100</div>
+      <div class="ex-hint-box">Rol: 0,0,0,0,1,1,1,1,2,2,2,3 | n=12</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex5-fi')">❓ Não sei calcular fi</button>
+      <div class="help-card" id="h-ex5-fi">
+        <div class="hc-title">Como calcular fi (frequência absoluta)</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Olhe o rol: 0,0,0,0,1,1,1,1,2,2,2,3</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Conte quantas vezes cada valor aparece</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>0 aparece 4 vezes → fi = 4 | 1 aparece 4 vezes → fi = 4 | 2 aparece 3 vezes → fi = 3 | 3 aparece 1 vez → fi = 1</div></div>
+        <div class="hc-warn"><strong>Verificação:</strong> some todos os fi. O resultado deve ser igual a n=12. Se não der 12, você errou a contagem.</div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex5-fi2')">❓ Não sei calcular Fi</button>
+      <div class="help-card" id="h-ex5-fi2">
+        <div class="hc-title">Como calcular Fi (frequência acumulada)</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Primeira linha: Fi = fi da primeira linha (não tem nada acima)</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Segunda linha em diante: Fi = fi atual + Fi da linha anterior</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Exemplo: faltas 0 → Fi=4 | faltas 1 → Fi=4+4=8 | faltas 2 → Fi=3+8=11 | faltas 3 → Fi=1+11=12</div></div>
+        <div class="hc-warn"><strong>Verificação:</strong> o último Fi deve ser igual a n=12. Se não for, algo está errado.</div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex5-fri')">❓ Não sei calcular fri e %</button>
+      <div class="help-card" id="h-ex5-fri">
+        <div class="hc-title">Como calcular fri e %</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>fri = fi ÷ n | Exemplo: fi=4, n=12 → 4÷12 = 0,33</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>% = fri × 100 | Exemplo: 0,33 × 100 = 33%</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Faça isso pra cada linha separadamente</div></div>
+        <div class="hc-warn"><strong>Verificação:</strong> some todos os fri → deve dar 1,00. Some todos os % → deve dar 100%.</div>
+      </div>
+
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>Faltas</th><th>fi</th><th>Fi</th><th>fri</th><th>%</th></tr>
@@ -1129,7 +1166,25 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <div class="ex-card" id="ex7">
       <div class="ex-num">QUESTÃO 07 · Tabela Interativa</div>
       <div class="ex-q">Notas de 30 alunos. Menor=2,5 | Maior=9,5. Calcule AT, k e h, depois preencha a tabela de classes:</div>
-      <div class="ex-hint-box">AT=maior−menor | k=√30≈5,5→6 | h=AT÷k | Ponto médio xi=(inf+sup)÷2</div>
+      <div class="ex-hint-box">AT=maior−menor | k=√30≈5,5→6 | h=AT÷k</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex7-at')">❓ Não sei calcular AT, k e h</button>
+      <div class="help-card" id="h-ex7-at">
+        <div class="hc-title">Como calcular AT, k e h</div>
+        <div class="hc-step"><div class="hc-num">1</div><div><strong>AT</strong> = maior valor − menor valor = 9,5 − 2,5 = 7</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div><strong>k</strong> = √n = √30 = 5,47 → arredonde pra cima = 6 classes</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div><strong>h</strong> = AT ÷ k = 7 ÷ 6 = 1,16 → arredonde = 1,2</div></div>
+        <div class="hc-warn"><strong>Ordem obrigatória:</strong> AT primeiro, depois k, depois h. Não dá pra calcular h sem ter AT e k.</div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex7-xi')">❓ Não sei calcular o ponto médio xi</button>
+      <div class="help-card" id="h-ex7-xi">
+        <div class="hc-title">Como calcular xi (ponto médio da classe)</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Pegue o limite inferior e o limite superior da classe</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Some os dois e divida por 2</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Exemplo: classe 2,5–3,7 → xi = (2,5+3,7)÷2 = 6,2÷2 = 3,1</div></div>
+        <div class="hc-warn"><strong>Dica:</strong> o ponto médio é literalmente o meio do intervalo. Faça isso pra cada classe separadamente.</div>
+      </div>
       <div class="ans-row"><span class="ans-label">AT (Amplitude Total):</span><input class="ans-inp" data-ans="7" data-ex="ex7" placeholder="?"></div>
       <div class="ans-row"><span class="ans-label">k (nº de classes — use 6):</span><input class="ans-inp" data-ans="6" data-ex="ex7" placeholder="?"></div>
       <div class="ans-row"><span class="ans-label">h (amplitude — AT÷6, arredonde para 1,2):</span><input class="ans-inp" data-ans="1,2" data-ex="ex7" placeholder="?"></div>
@@ -1210,6 +1265,16 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
       <div class="ex-num">QUESTÃO 11 · Tabela Interativa</div>
       <div class="ex-q">Preencha a coluna xi×fi e calcule a média agrupada (n=20):</div>
       <div class="ex-hint-box">xi×fi = ponto médio × frequência | Some a coluna e divida por n</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex11-xifi')">❓ Não sei calcular xi×fi</button>
+      <div class="help-card" id="h-ex11-xifi">
+        <div class="hc-title">Como calcular xi×fi e a média agrupada</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>xi×fi = ponto médio × frequência da classe. Multiplique os dois.</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Exemplo: xi=110, fi=4 → 110×4 = 440</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Faça isso pra cada linha da tabela</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>Some todos os xi×fi → divida pelo total n=20 → média agrupada</div></div>
+        <div class="hc-warn"><strong>Resumo:</strong> xi×fi é só uma multiplicação por linha. A média agrupada é a soma de tudo dividida por n.</div>
+      </div>
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>Classe (ms)</th><th>fi</th><th>xi</th><th>xi × fi</th></tr>
@@ -1234,6 +1299,25 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
       <div class="ex-num">QUESTÃO 12 · Tabela Interativa + Cálculo</div>
       <div class="ex-q">Preencha a coluna Fi (frequência acumulada) e depois calcule a mediana agrupada (n=40):</div>
       <div class="ex-hint-box">Fi = soma das fi até aquela linha | Classe mediana: primeira onde Fi ≥ n/2=20</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex12-fi')">❓ Não sei preencher Fi</button>
+      <div class="help-card" id="h-ex12-fi">
+        <div class="hc-title">Como preencher Fi aqui</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Primeira linha (4–5, fi=3): Fi = 3</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Segunda linha (5–6, fi=6): Fi = 6+3 = 9</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Continue somando fi atual + Fi anterior em cada linha</div></div>
+        <div class="hc-warn"><strong>Último Fi deve ser igual a n=40.</strong></div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex12-md')">❓ Não sei calcular a mediana agrupada</button>
+      <div class="help-card" id="h-ex12-md">
+        <div class="hc-title">Mediana agrupada — Md = L + [(n/2 − Fi₋₁) ÷ fi] × h</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>n/2 = 40÷2 = 20. Procure a primeira classe onde Fi ≥ 20</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Classe 6–7 tem Fi=19 (menor que 20). Classe 7–8 tem Fi=28 (≥20) → essa é a classe mediana</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>L=7 (onde começa) | Fi₋₁=19 (Fi da classe anterior) | fi=9 (freq. da classe mediana) | h=1 (tamanho da classe)</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>Md = 7 + [(20−19)÷9] × 1 = 7 + (1÷9) = 7 + 0,11 = 7,11</div></div>
+        <div class="hc-warn"><strong>Ordem:</strong> preencha Fi → ache n/2 → identifique a classe → aplique a fórmula.</div>
+      </div>
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>Classe</th><th>fi</th><th>Fi</th></tr>
@@ -1282,7 +1366,26 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <div class="ex-card" id="ex14">
       <div class="ex-num">QUESTÃO 14 · Tabela Interativa</div>
       <div class="ex-q">Dados: 4, 6, 8, 10, 12. x̄=8. Preencha a tabela de dispersão e calcule DM, variância e desvio padrão:</div>
-      <div class="ex-hint-box">xi−x̄ = valor menos média | |xi−x̄| = valor absoluto (sempre positivo) | (xi−x̄)² = ao quadrado</div>
+      <div class="ex-hint-box">x̄=8 já calculada | preencha da esquerda pra direita</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex14-dev')">❓ Não sei calcular xi−x̄</button>
+      <div class="help-card" id="h-ex14-dev">
+        <div class="hc-title">Como calcular xi−x̄ (desvio)</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Pegue o valor xi e subtraia a média (x̄=8)</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>xi=4 → 4−8 = −4 | xi=6 → 6−8 = −2 | xi=8 → 8−8 = 0</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Pode dar negativo — é normal! Significa que o valor está abaixo da média.</div></div>
+        <div class="hc-warn"><strong>Dica:</strong> valor abaixo da média → resultado negativo. Valor acima → positivo. Valor igual à média → zero.</div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex14-mod')">❓ Não sei calcular |xi−x̄| e (xi−x̄)²</button>
+      <div class="help-card" id="h-ex14-mod">
+        <div class="hc-title">Módulo e quadrado do desvio</div>
+        <div class="hc-step"><div class="hc-num">1</div><div><strong>|xi−x̄|</strong> = tire o sinal negativo. −4 vira 4. −2 vira 2. 0 fica 0.</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div><strong>(xi−x̄)²</strong> = eleve ao quadrado. −4² = 16. −2² = 4. 0² = 0. 2² = 4. 4² = 16.</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Some a coluna |xi−x̄| → divida por n=5 → <strong>Desvio Médio</strong></div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>Some a coluna (xi−x̄)² → divida por n=5 → <strong>Variância</strong> → tire a raiz → <strong>Desvio Padrão</strong></div></div>
+        <div class="hc-warn"><strong>Número negativo ao quadrado sempre dá positivo.</strong> −4² = 16, não −16.</div>
+      </div>
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>xi</th><th>xi − x̄</th><th>|xi − x̄|</th><th>(xi − x̄)²</th></tr>
@@ -1323,7 +1426,17 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <div class="ex-card" id="ex16">
       <div class="ex-num">QUESTÃO 16 · Tabela Interativa</div>
       <div class="ex-q">Notas de 6 alunos: 5, 6, 7, 8, 9, 7. x̄=7. Preencha a tabela e calcule variância e desvio padrão:</div>
-      <div class="ex-hint-box">(xi−x̄)² = diferença ao quadrado | σ²=Σ(xi−x̄)²÷n | σ=√σ²</div>
+      <div class="ex-hint-box">x̄=7 já calculada | preencha coluna por coluna</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex16-calc')">❓ Como preencher essa tabela?</button>
+      <div class="help-card" id="h-ex16-calc">
+        <div class="hc-title">Passo a passo desta tabela</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Coluna xi−x̄: subtraia 7 de cada valor. Ex: 5−7=−2, 6−7=−1, 7−7=0, 8−7=1, 9−7=2</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Coluna (xi−x̄)²: eleve ao quadrado. (−2)²=4, (−1)²=1, 0²=0, 1²=1, 2²=4, 0²=0</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Some a coluna (xi−x̄)²: 4+1+0+1+4+0 = 10</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>Variância = 10 ÷ 6 = 1,67 | Desvio Padrão = √1,67 ≈ 1,29</div></div>
+        <div class="hc-warn"><strong>Sempre da esquerda pra direita:</strong> xi−x̄ primeiro, depois eleva ao quadrado, depois some, depois divide.</div>
+      </div>
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>xi</th><th>xi−x̄</th><th>(xi−x̄)²</th></tr>
@@ -1387,6 +1500,18 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
       <div class="ex-num">QUESTÃO 19 · Exercício Completo (estilo prova)</div>
       <div class="ex-q">Idades de 10 alunos: 18, 20, 19, 21, 20, 22, 18, 20, 21, 19. Calcule tudo:</div>
       <div class="ex-hint-box">Rol: 18,18,19,19,20,20,20,21,21,22 | n=10</div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex19-all')">❓ Por onde começo nesse exercício?</button>
+      <div class="help-card" id="h-ex19-all">
+        <div class="hc-title">Ordem de cálculo para esse exercício completo</div>
+        <div class="hc-step"><div class="hc-num">1</div><div><strong>Média:</strong> some os 10 valores e divida por 10</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div><strong>Mediana:</strong> n=10 par → posições 5ª e 6ª do rol → (20+20)÷2 = 20</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div><strong>Moda:</strong> veja qual valor mais aparece no rol → 20 aparece 3× → Mo=20</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div><strong>Tabela fi:</strong> conte cada valor no rol. 18→2×, 19→2×, 20→3×, 21→2×, 22→1×</div></div>
+        <div class="hc-step"><div class="hc-num">5</div><div><strong>Tabela Fi:</strong> acumule de cima pra baixo. 2, 4, 7, 9, 10</div></div>
+        <div class="hc-step"><div class="hc-num">6</div><div><strong>fri:</strong> fi ÷ 10 pra cada linha | <strong>%:</strong> fri × 100</div></div>
+        <div class="hc-warn"><strong>Ordem certa:</strong> média → mediana → moda → fi → Fi → fri → %. Não pule etapa.</div>
+      </div>
       <div class="ans-row"><span class="ans-label">Soma dos valores:</span><input class="ans-inp" data-ans="198" data-ex="ex19" placeholder="?"></div>
       <div class="ans-row"><span class="ans-label">Média (x̄):</span><input class="ans-inp" data-ans="19,8" data-ex="ex19" placeholder="?"></div>
       <div class="ans-row"><span class="ans-label">Mediana (n=10 par — posições 5ª e 6ª):</span><input class="ans-inp" data-ans="20" data-ex="ex19" placeholder="?"></div>
@@ -1414,6 +1539,15 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <div class="ex-card" id="ex20">
       <div class="ex-num">QUESTÃO 20 · Tabela Completa de Dispersão (estilo prova)</div>
       <div class="ex-q">Dados: 2, 4, 6, 8, 10. x̄=6. Preencha tudo e calcule DM, variância e DP:</div>
+      <button class="help-btn" onclick="toggleHelp('h-ex20-all')">❓ Como resolver essa tabela?</button>
+      <div class="help-card" id="h-ex20-all">
+        <div class="hc-title">Passo a passo — x̄=6</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>xi−x̄: subtraia 6 de cada valor. 2−6=−4, 4−6=−2, 6−6=0, 8−6=2, 10−6=4</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>|xi−x̄|: tire o negativo. 4, 2, 0, 2, 4. Some tudo → 12</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>(xi−x̄)²: eleve ao quadrado. 16, 4, 0, 4, 16. Some tudo → 40</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>DM = 12÷5 = 2,4 | σ² = 40÷5 = 8 | σ = √8 ≈ 2,83</div></div>
+        <div class="hc-warn"><strong>Sempre preencha coluna por coluna, de cima pra baixo. Nunca linha por linha.</strong></div>
+      </div>
       <div class="tbl-wrap">
         <table class="ex-tbl">
           <tr><th>xi</th><th>xi−x̄</th><th>|xi−x̄|</th><th>(xi−x̄)²</th></tr>
@@ -1650,6 +1784,11 @@ function initCharts(){
     },
     options:{plugins:{legend:{display:true,position:'bottom',labels:{color:'#6b7492',font:{size:12},padding:16}}}}
   });
+}
+
+function toggleHelp(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
 }
 
 function openGPT(){
