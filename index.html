@@ -1165,32 +1165,48 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <!-- EX7: AT k h + tabela contínua -->
     <div class="ex-card" id="ex7">
       <div class="ex-num">QUESTÃO 07 · Tabela Interativa</div>
-      <div class="ex-q">Notas de 30 alunos. Menor=2,5 | Maior=9,5. Calcule AT, k e h, depois preencha a tabela de classes:</div>
-      <div class="ex-hint-box">AT=maior−menor | k=√30≈5,5→6 | h=AT÷k</div>
+      <div class="ex-q">Notas de 30 alunos em uma prova de Estatística:</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--a);margin-bottom:12px;line-height:2">
+        3,5 — 4,2 — 2,8 — 6,5 — 7,1 — 5,4 — 8,2 — 4,7 — 6,0 — 3,1<br>
+        9,0 — 5,5 — 7,8 — 6,3 — 4,1 — 5,9 — 8,5 — 3,8 — 6,7 — 7,3<br>
+        5,1 — 9,5 — 4,5 — 6,2 — 7,6 — 5,8 — 2,5 — 8,1 — 6,9 — 7,0
+      </div>
+      <div class="ex-hint-box">Menor=2,5 | Maior=9,5 | AT=maior−menor | k=√30→6 | h=AT÷k→1,2 | Monte o rol e conte os valores em cada classe</div>
 
       <button class="help-btn" onclick="toggleHelp('h-ex7-at')">❓ Não sei calcular AT, k e h</button>
       <div class="help-card" id="h-ex7-at">
         <div class="hc-title">Como calcular AT, k e h</div>
-        <div class="hc-step"><div class="hc-num">1</div><div><strong>AT</strong> = maior valor − menor valor = 9,5 − 2,5 = 7</div></div>
-        <div class="hc-step"><div class="hc-num">2</div><div><strong>k</strong> = √n = √30 = 5,47 → arredonde pra cima = 6 classes</div></div>
-        <div class="hc-step"><div class="hc-num">3</div><div><strong>h</strong> = AT ÷ k = 7 ÷ 6 = 1,16 → arredonde = 1,2</div></div>
-        <div class="hc-warn"><strong>Ordem obrigatória:</strong> AT primeiro, depois k, depois h. Não dá pra calcular h sem ter AT e k.</div>
+        <div class="hc-step"><div class="hc-num">1</div><div><strong>AT</strong> = maior − menor = 9,5 − 2,5 = 7</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div><strong>k</strong> = √30 = 5,47 → arredonde pra cima = 6 classes</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div><strong>h</strong> = 7 ÷ 6 = 1,16 → arredonde = 1,2</div></div>
+        <div class="hc-warn"><strong>Ordem obrigatória:</strong> AT → k → h. Não pule etapa.</div>
+      </div>
+
+      <button class="help-btn" onclick="toggleHelp('h-ex7-fi')">❓ Como conto o fi de cada classe?</button>
+      <div class="help-card" id="h-ex7-fi">
+        <div class="hc-title">Como contar fi para cada classe</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>Monte o rol: organize os 30 valores em ordem crescente no papel</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Percorra o rol e conte quantos valores caem em cada intervalo</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Regra: valor ≥ limite inferior E &lt; limite superior pertence à classe</div></div>
+        <div class="hc-step"><div class="hc-num">4</div><div>Classe 2,5–3,7: valores 2,5 / 2,8 / 3,1 / 3,5 / 3,8 → fi=5... espera, 3,8 cai na próxima! → fi=3</div></div>
+        <div class="hc-warn"><strong>Dica:</strong> risque cada valor do rol depois de colocar na classe. Assim não conta duas vezes.</div>
       </div>
 
       <button class="help-btn" onclick="toggleHelp('h-ex7-xi')">❓ Não sei calcular o ponto médio xi</button>
       <div class="help-card" id="h-ex7-xi">
-        <div class="hc-title">Como calcular xi (ponto médio da classe)</div>
-        <div class="hc-step"><div class="hc-num">1</div><div>Pegue o limite inferior e o limite superior da classe</div></div>
-        <div class="hc-step"><div class="hc-num">2</div><div>Some os dois e divida por 2</div></div>
-        <div class="hc-step"><div class="hc-num">3</div><div>Exemplo: classe 2,5–3,7 → xi = (2,5+3,7)÷2 = 6,2÷2 = 3,1</div></div>
-        <div class="hc-warn"><strong>Dica:</strong> o ponto médio é literalmente o meio do intervalo. Faça isso pra cada classe separadamente.</div>
+        <div class="hc-title">Como calcular xi (ponto médio)</div>
+        <div class="hc-step"><div class="hc-num">1</div><div>xi = (limite inferior + limite superior) ÷ 2</div></div>
+        <div class="hc-step"><div class="hc-num">2</div><div>Classe 2,5–3,7 → xi = (2,5+3,7)÷2 = 6,2÷2 = 3,1</div></div>
+        <div class="hc-step"><div class="hc-num">3</div><div>Faça isso pra cada classe separadamente</div></div>
+        <div class="hc-warn"><strong>O ponto médio é o meio do intervalo.</strong> Sempre o mesmo cálculo.</div>
       </div>
+
       <div class="ans-row"><span class="ans-label">AT (Amplitude Total):</span><input class="ans-inp" data-ans="7" data-ex="ex7" placeholder="?"></div>
-      <div class="ans-row"><span class="ans-label">k (nº de classes — use 6):</span><input class="ans-inp" data-ans="6" data-ex="ex7" placeholder="?"></div>
-      <div class="ans-row"><span class="ans-label">h (amplitude — AT÷6, arredonde para 1,2):</span><input class="ans-inp" data-ans="1,2" data-ex="ex7" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">k (nº de classes):</span><input class="ans-inp" data-ans="6" data-ex="ex7" placeholder="?"></div>
+      <div class="ans-row"><span class="ans-label">h (amplitude da classe — use 1,2):</span><input class="ans-inp" data-ans="1,2" data-ex="ex7" placeholder="?"></div>
       <div class="tbl-wrap" style="margin-top:12px">
         <table class="ex-tbl">
-          <tr><th>Classe</th><th>fi</th><th>xi (pont. médio)</th></tr>
+          <tr><th>Classe</th><th>fi</th><th>xi (ponto médio)</th></tr>
           <tr><td>2,5 – 3,7</td><td><input class="tbl-inp" data-ans="3" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="3,1" data-ex="ex7" placeholder="?"></td></tr>
           <tr><td>3,7 – 4,9</td><td><input class="tbl-inp" data-ans="5" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="4,3" data-ex="ex7" placeholder="?"></td></tr>
           <tr><td>4,9 – 6,1</td><td><input class="tbl-inp" data-ans="9" data-ex="ex7" placeholder="?"></td><td><input class="tbl-inp" data-ans="5,5" data-ex="ex7" placeholder="?"></td></tr>
@@ -1203,7 +1219,11 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
       <button class="btn btn-primary" onclick="checkTyped('ex7',15)">VERIFICAR</button>
       <button class="btn btn-ghost" onclick="resetTyped('ex7')">LIMPAR</button>
       <button class="btn btn-blue" onclick="toggleGab('g-ex7')">Ver gabarito</button>
-      <div class="gabarito" id="g-ex7">AT=7 | k=6 | h=1,2 | fi: 3,5,9,7,4,2 (total=30) | xi: 3,1 / 4,3 / 5,5 / 6,7 / 7,9 / 9,1</div>
+      <div class="gabarito" id="g-ex7">
+        AT=7 | k=6 | h=1,2<br>
+        Rol: 2,5 / 2,8 / 3,1 / 3,5 / 3,8 / 4,1 / 4,2 / 4,5 / 4,7 / 5,1 / 5,4 / 5,5 / 5,8 / 5,9 / 6,0 / 6,2 / 6,3 / 6,5 / 6,7 / 6,9 / 7,0 / 7,1 / 7,3 / 7,6 / 7,8 / 8,1 / 8,2 / 8,5 / 9,0 / 9,5<br>
+        fi: 3 / 5 / 9 / 7 / 4 / 2 (total=30) | xi: 3,1 / 4,3 / 5,5 / 6,7 / 7,9 / 9,1
+      </div>
     </div>
 
     <!-- NÍVEL 3 -->
