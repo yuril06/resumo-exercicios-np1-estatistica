@@ -47,6 +47,9 @@ header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 
 
 /* NAV */
 .nav-tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 12px}
+.ntab-star{padding:13px 18px;border:none;background:linear-gradient(135deg,rgba(245,200,66,0.15),rgba(245,200,66,0.05));border-bottom:2px solid var(--a);color:var(--a);font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;position:relative}
+.ntab-star:hover{background:rgba(245,200,66,0.2)}
+.ntab-star.active{background:var(--a);color:#000}
 .ntab{padding:13px 16px;border:none;background:transparent;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--sans);font-size:13px;cursor:pointer;white-space:nowrap;transition:all .2s}
 .ntab:hover{color:var(--text)}
 .ntab.active{color:var(--a);border-bottom-color:var(--a)}
@@ -214,6 +217,7 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
   </header>
 
   <div class="nav-tabs">
+    <button class="ntab-star" onclick="showTab('guia',this)">⚡ COMO CALCULAR</button>
     <button class="ntab active" onclick="showTab('conceitos',this)">Conceitos</button>
     <button class="ntab" onclick="showTab('frequencia',this)">Frequências</button>
     <button class="ntab" onclick="showTab('tendencia',this)">Tendência Central</button>
@@ -221,6 +225,242 @@ table.ex-tbl tr:last-child td{border-bottom:none;font-weight:500}
     <button class="ntab" onclick="showTab('graficos',this)">Gráficos</button>
     <button class="ntab" onclick="showTab('revisao',this)">Revisão Completa</button>
     <button class="ntab" onclick="showTab('exercicios',this)">Exercícios</button>
+  </div>
+
+  <!-- GUIA RÁPIDO -->
+  <div id="guia" class="panel">
+  <div class="content">
+    <div class="stag">Referência rápida</div>
+    <div class="sh">Como Calcular Cada Coisa</div>
+
+    <div class="hint3" style="margin-bottom:1.5rem">
+      <strong>Como usar este guia:</strong> antes de fazer qualquer cálculo, leia a ordem aqui. Cada valor depende do anterior — pular uma etapa garante erro na prova.
+    </div>
+
+    <!-- TABELA DE FREQUÊNCIA -->
+    <div class="card" style="border-color:rgba(62,207,255,0.4)">
+      <div class="card-title" style="color:var(--a2);font-size:17px">📊 Tabela de Frequência — Ordem de cálculo</div>
+      <div class="csub" style="margin-bottom:14px">Esta é a parte que vale mais pontos. Siga EXATAMENTE essa ordem:</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a);letter-spacing:2px;margin-bottom:6px">PASSO 0 — ANTES DE TUDO</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Monte o Rol</div>
+          <div class="csub">Organize todos os dados em ordem crescente. <strong>Sem isso, nada funciona.</strong><br>
+          Ex: 3,1,2,1,3,2 → Rol: 1,1,2,2,3,3</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a2);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a2);letter-spacing:2px;margin-bottom:6px">PASSO 1 — PRIMEIRO A PREENCHER</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">fi — Frequência Absoluta</div>
+          <div class="csub">Conte quantas vezes cada valor aparece no rol.<br>
+          <strong>Não precisa de nada antes.</strong> É só contar.<br>
+          Ex: valor 1 aparece 2× → fi = 2<br>
+          ⚠️ A soma de todos os fi deve ser igual a n.</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do fi</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid #c084fc;border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:#c084fc;letter-spacing:2px;margin-bottom:6px">PASSO 2 — DEPENDE DO fi</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Fi — Frequência Acumulada</div>
+          <div class="csub">Some o fi da linha atual com o Fi da linha anterior.<br>
+          <strong>Precisa do fi preenchido antes.</strong><br>
+          Primeira linha: Fi = fi (não tem linha anterior)<br>
+          Demais linhas: Fi = fi atual + Fi anterior<br>
+          Ex: fi=2, Fi anterior=4 → Fi = 2+4 = 6<br>
+          ⚠️ O último Fi deve ser igual a n.</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do fi e do n</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a4);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a4);letter-spacing:2px;margin-bottom:6px">PASSO 3 — DEPENDE DO fi E n</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">fri — Frequência Relativa</div>
+          <div class="csub">Divide o fi pelo total de dados (n).<br>
+          <strong>Fórmula: fri = fi ÷ n</strong><br>
+          Ex: fi=4, n=12 → fri = 4÷12 = 0,33<br>
+          ⚠️ A soma de todos os fri deve ser 1,00 (ou muito próximo).</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do fri</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a3);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a3);letter-spacing:2px;margin-bottom:6px">PASSO 4 — DEPENDE DO fri</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">% — Frequência Percentual</div>
+          <div class="csub">Multiplica o fri por 100.<br>
+          <strong>Fórmula: % = fri × 100</strong><br>
+          Ex: fri=0,33 → % = 0,33×100 = 33%<br>
+          ⚠️ A soma de todos os % deve ser 100%.</div>
+        </div>
+
+      </div>
+
+      <div class="hint" style="margin-top:14px"><strong>Resumo da ordem:</strong> Rol → fi → Fi → fri → % &nbsp;|&nbsp; Nunca pule uma etapa.</div>
+    </div>
+
+    <!-- TABELA PARA CLASSES -->
+    <div class="card" style="border-color:rgba(245,200,66,0.4);margin-top:6px">
+      <div class="card-title" style="color:var(--a);font-size:17px">📊 Tabela com Classes (variável contínua) — Ordem</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a);letter-spacing:2px;margin-bottom:6px">PASSO 1</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">AT — Amplitude Total</div>
+          <div class="csub"><strong>Fórmula: AT = maior valor − menor valor</strong><br>
+          Não precisa de nada antes. É só subtrair.<br>
+          Ex: maior=9,5, menor=2,5 → AT = 7</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do AT e n</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a2);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a2);letter-spacing:2px;margin-bottom:6px">PASSO 2</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">k — Número de Classes</div>
+          <div class="csub"><strong>Fórmula: k = √n → arredonde para cima</strong><br>
+          Precisa saber n (total de dados).<br>
+          Ex: n=20 → √20 = 4,47 → k = 5</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do AT e k</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a4);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a4);letter-spacing:2px;margin-bottom:6px">PASSO 3</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">h — Amplitude de cada Classe</div>
+          <div class="csub"><strong>Fórmula: h = AT ÷ k → arredonde</strong><br>
+          Precisa do AT e do k calculados antes.<br>
+          Ex: AT=7, k=6 → h = 7÷6 = 1,16 → use 1,2</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ com h em mãos, monte as classes</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid #c084fc;border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:#c084fc;letter-spacing:2px;margin-bottom:6px">PASSO 4</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">xi — Ponto Médio de cada Classe</div>
+          <div class="csub"><strong>Fórmula: xi = (limite inferior + limite superior) ÷ 2</strong><br>
+          Precisa das classes montadas.<br>
+          Ex: classe 100–120 → xi = (100+120)÷2 = 110</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa do xi e fi</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a3);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a3);letter-spacing:2px;margin-bottom:6px">PASSO 5 — só pra média agrupada</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">xi × fi — coluna extra</div>
+          <div class="csub"><strong>Multiplica ponto médio pela frequência de cada classe.</strong><br>
+          Some toda a coluna → divida por n → média agrupada.<br>
+          Ex: xi=110, fi=4 → xi×fi = 440</div>
+        </div>
+
+      </div>
+      <div class="hint"><strong>Resumo:</strong> AT → k → h → monta classes → fi → xi → xi×fi → média</div>
+    </div>
+
+    <!-- MÉDIA MEDIANA MODA -->
+    <div class="card" style="border-color:rgba(79,255,176,0.4);margin-top:6px">
+      <div class="card-title" style="color:var(--a4);font-size:17px">📐 Média, Mediana e Moda — Ordem</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Média Simples</div>
+          <div class="csub">1. Some todos os valores<br>2. Divida pela quantidade (n)<br>
+          <strong>Não depende de nada antes.</strong></div>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a2);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Mediana</div>
+          <div class="csub">1. Monte o rol (ordem crescente) — <strong>obrigatório</strong><br>
+          2. Se n ímpar: posição = (n+1)÷2, pegue esse valor<br>
+          3. Se n par: pegue os valores das posições n/2 e n/2+1, tire a média<br>
+          <strong>Depende do rol.</strong></div>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a4);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Moda</div>
+          <div class="csub">1. Monte o rol (facilita muito)<br>
+          2. Conte quantas vezes cada valor aparece<br>
+          3. O que aparecer mais = moda<br>
+          <strong>Não precisa de cálculo. Só contagem.</strong></div>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid #c084fc;border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Mediana Agrupada — Fórmula Md = L + [(n/2 − Fi₋₁) ÷ fi] × h</div>
+          <div class="csub">
+          1. Precisa da tabela com Fi montada<br>
+          2. Ache n/2 (metade do total)<br>
+          3. Encontre a classe mediana: primeira onde Fi ≥ n/2<br>
+          4. L = limite inferior dessa classe<br>
+          5. Fi₋₁ = Fi da classe ANTERIOR<br>
+          6. fi = frequência da classe mediana<br>
+          7. h = amplitude da classe<br>
+          <strong>Depende da tabela de frequência completa.</strong></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DISPERSÃO -->
+    <div class="card" style="border-color:rgba(255,95,126,0.4);margin-top:6px">
+      <div class="card-title" style="color:var(--a3);font-size:17px">📏 Dispersão — Ordem obrigatória</div>
+      <div class="csub" style="margin-bottom:14px">Esses três sempre nessa ordem. Um depende do anterior.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a);letter-spacing:2px;margin-bottom:6px">PASSO 1 — SEMPRE PRIMEIRO</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">x̄ — Média</div>
+          <div class="csub">Calcule a média primeiro. <strong>Todos os outros dependem dela.</strong><br>
+          Fórmula: x̄ = soma de todos ÷ n</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa da média</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a2);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a2);letter-spacing:2px;margin-bottom:6px">PASSO 2 — MONTE A TABELA</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">xi − x̄ — Desvio de cada valor</div>
+          <div class="csub">Subtraia a média de cada valor.<br>
+          Pode dar negativo — é normal!<br>
+          Ex: xi=4, x̄=8 → 4−8 = −4</div>
+        </div>
+
+        <div style="text-align:center;color:var(--muted);font-size:18px">↓ precisa dos desvios</div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a4);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a4);letter-spacing:2px;margin-bottom:6px">PASSO 3A — PARA O DESVIO MÉDIO</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">|xi − x̄| — Módulo do desvio</div>
+          <div class="csub">Tire o valor absoluto — transforma negativo em positivo.<br>
+          Ex: −4 vira 4 | −2 vira 2 | 0 fica 0<br>
+          Some todos os módulos → divida por n → <strong>Desvio Médio</strong></div>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-left:4px solid var(--a3);border-radius:0 10px 10px 0;padding:14px 16px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--a3);letter-spacing:2px;margin-bottom:6px">PASSO 3B — PARA VARIÂNCIA E DP</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">(xi − x̄)² — Desvio ao quadrado</div>
+          <div class="csub">Eleve cada desvio ao quadrado.<br>
+          Ex: −4² = 16 | −2² = 4 | 0² = 0<br>
+          Some todos → divida por n → <strong>Variância (σ²)</strong><br>
+          Tire a raiz da variância → <strong>Desvio Padrão (σ)</strong></div>
+        </div>
+
+      </div>
+
+      <div class="hint" style="margin-top:14px">
+        <strong>Resumo da ordem:</strong><br>
+        Média → desvios (xi−x̄) → módulos → DM<br>
+        Média → desvios (xi−x̄) → quadrados → soma → variância → √ → DP
+      </div>
+
+      <div class="hint2" style="margin-top:8px">
+        <strong>Dica de ouro:</strong> Monte sempre a tabela no papel com as colunas: xi | xi−x̄ | |xi−x̄| | (xi−x̄)². Preencha linha por linha, da esquerda pra direita. Nunca pule coluna.
+      </div>
+    </div>
+
+  </div>
   </div>
 
   <!-- CONCEITOS -->
